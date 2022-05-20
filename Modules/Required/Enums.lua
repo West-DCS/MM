@@ -1,28 +1,19 @@
---[[
-@Module Enum
+---@authors funkyfranky, Applevangelist, TommyC81, FlightControl-User
+---@description
+---Attribution: MOOSE by FlightControl. https://github.com/FlightControl-Master/MOOSE/blob/master/Moose%20Development/Moose/Utilities/Enums.lua
+---DCS enumerators.
+---@Created 16MAY22
 
-@Authors funkyfranky, Applevangelist, TommyC81, FlightControl-User
-
-@Description
-Attribution: MOOSE by FlightControl. https://github.com/FlightControl-Master/MOOSE/blob/master/Moose%20Development/Moose/Utilities/Enums.lua
-DCS enumerators.
-
-@Created 16MAY22
-
-@TODO
-]]
-
--- @field #ENUMS
+---@class ENUMS
 ENUMS = {}
 
---- Rules of Engagement.
--- @type ENUMS.ROE
--- @field #number WeaponFree AI will engage any enemy group it detects. Target prioritization is based based on the threat of the target.
--- @field #number OpenFireWeaponFree AI will engage any enemy group it detects, but will prioritize targets specified in the groups tasking.
--- @field #number OpenFire AI will engage only targets specified in its taskings.
--- @field #number ReturnFire AI will only engage threats that shoot first.
--- @field #number WeaponHold AI will hold fire under all circumstances.
+---@field public ROE table Rules of Engagement.
 ENUMS.ROE = {
+  ---@field public WeaponFree number AI will engage any enemy group it detects. Target prioritization is based based on the threat of the target.
+  ---@field public OpenFireWeaponFree number AI will engage any enemy group it detects, but will prioritize targets specified in the groups tasking.
+  ---@field public OpenFire number AI will engage only targets specified in its tasks.
+  ---@field public ReturnFire number AI will only engage threats that shoot first.
+  ---@field public WeaponHold number AI will hold fire under all circumstances.
   WeaponFree=0,
   OpenFireWeaponFree=1,
   OpenFire=2,
@@ -118,7 +109,7 @@ ENUMS.WeaponFlag={
   --- Torpedo
   Torpedo              = 4294967296,
   ---
-  -- Even More Genral  
+  -- Even More Genral
   Auto                 = 3221225470, -- Any Weapon (AnyBomb + AnyRocket + AnyMissile + Cannons)
   AutoDCS              = 1073741822, -- Something if often see
   AnyAG                = 2956984318, -- Any Air-To-Ground Weapon
