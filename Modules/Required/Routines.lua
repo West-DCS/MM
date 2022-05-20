@@ -1,20 +1,16 @@
---[[
-@Module Routines
+---@author West#9009
+---@description Routinely used functions.
+---@created 16MAY22
 
-@Author West#9009
-
-@Description
-Routinely used functions.
-
-@Created 16MAY22
-
-@TODO
-]]
-
+---@class ROUTINES
+---@field public util table Utility functions.
+---@field public file table File functions.
 ROUTINES = {}
 ROUTINES.util = {}
+ROUTINES.file = {}
 
--- Attribution: MIST https://github.com/mrSkortch/MissionScriptingTools
+---@param object table The object or table to copy.
+---@return table The new table with copied metatables.
 ROUTINES.util.deepCopy = function(object)
     local lookup_table = {}
     local function _copy(object)
@@ -33,6 +29,8 @@ ROUTINES.util.deepCopy = function(object)
     return _copy(object)
 end
 
+---@param fileName string The file name to test.
+---@return boolean Is file?
 ROUTINES.file.isFile = function(fileName)
     if lfs.attributes(fileName) then
         return true
@@ -41,6 +39,8 @@ ROUTINES.file.isFile = function(fileName)
     end 
 end
 
+---@param dirName string The directory name to test.
+---@return boolean Is directory?
 ROUTINES.file.isDir = function(dirName)
     if lfs.attributes(dirName:gsub("\\$",""),"mode") == "directory" then
         return true
