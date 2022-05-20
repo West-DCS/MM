@@ -2,7 +2,9 @@
 ---@description Event dispatching.
 ---@created 20MAY22
 
-Events = {}
+Events = {
+    ClassName = 'Events'
+}
 
 function Events:New()
     local self = BASE:Inherit(self, BASE:New())
