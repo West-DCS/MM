@@ -1,0 +1,3 @@
+---@author West#9009
+---@description Event dispatching.
+---@created 20MAY22
