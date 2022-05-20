@@ -2,12 +2,18 @@
 ---@description Event dispatching.
 ---@created 20MAY22
 
-Events = {
-    ClassName = 'Events'
+EVENTS = {
+    ClassName = 'EVENTS'
 }
 
-function Events:New()
+function EVENTS:New()
     local self = BASE:Inherit(self, BASE:New())
 
+    world.addEventHandler(self)
+
     return self
+end
+
+function EVENTS:onEvent(event)
+    self:Log('info', 'An Event has occurred.')
 end
