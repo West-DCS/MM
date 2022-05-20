@@ -38,7 +38,7 @@ end
 ---@return BASE Returns self.
 function BASE:Log(logType, msg, ...)
     local write = function(logType, ...)
-        logType(string.format('%s %s', self:GetClassName(), string.format(msg, ...)))
+        logType(string.format('%s: %s', self:GetClassName(), string.format(msg, ...)))
     end
 
     local logTypes = {
