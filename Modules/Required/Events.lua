@@ -1,5 +1,5 @@
 ---@author West#9009
----@description Event dispatching.
+---@description Event dispatching. Based in part from MOOSE.
 ---@created 20MAY22
 
 ---@class EVENTS
