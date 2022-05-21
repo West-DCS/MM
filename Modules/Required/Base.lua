@@ -32,6 +32,10 @@ function BASE:GetClassName()
     return self.ClassName
 end
 
+function BASE:HandleEvent(eventID, callback)
+    __EVENTS:AddEvent(eventID, self, callback)
+end
+
 --- Log a message to DCS.log
 ---@param logType string info, warning, error
 ---@param msg string The message to log.
