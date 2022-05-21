@@ -3,12 +3,12 @@
 ---@created 20MAY22
 
 ---@class EVENTS
----@type BASE
 EVENTS = {
     ClassName = 'EVENTS'
 }
 
 --- Initialize a new instance.
+---@type BASE
 ---@return EVENTS Returns self.
 function EVENTS:New()
     local self = BASE:Inherit(self, BASE:New())
