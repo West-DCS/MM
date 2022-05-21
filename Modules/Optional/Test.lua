@@ -9,7 +9,7 @@ TEST = {
 function TEST:New()
     local self = BASE:Inherit(self, BASE:New())
 
-    self:HandleEvent(world.event.S_EVENT_BIRTH, self._OnEventBirth)
+    self:HandleEvent(ENUMS.EVENTS.Birth, self._OnEventBirth)
 
     return self
 end
