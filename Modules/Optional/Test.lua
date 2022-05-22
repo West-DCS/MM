@@ -18,6 +18,11 @@ function TEST:_OnEventBirth(EventData)
     local PlayerName = EventData.IniPlayerName
 
     self:Log('info', '%s was born!', PlayerName)
+
+    self:Schedule(10, function()
+        GROUP:FindByName('Aerial-1'):Destroy()
+        self:Log('info', 'Destroyed Unit!')
+    end)
 end
 
 TEST:New()
