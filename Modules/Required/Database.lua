@@ -2,9 +2,9 @@
 ---@description Databasing of DCS objects.
 ---@created 21MAY22
 
+---@class DATABASE
 DATABASE = {
     ClassName = 'DATABASE',
-    _ClientSlots = {},
     _Groups = {},
     _Units = {},
     _Zones = {}
