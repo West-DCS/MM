@@ -36,6 +36,12 @@ function BASE:HandleEvent(eventID, callback)
     __EVENTS:AddEvent(eventID, self, callback)
 end
 
+function BASE:Schedule(Seconds, Callback, ...)
+    timer.scheduleFunction(Callback, ..., timer.getTime() + Seconds)
+
+    return self
+end
+
 --- Log a message to DCS.log
 ---@param logType string info, warning, error
 ---@param msg string The message to log.
