@@ -22,7 +22,7 @@ end
 ---@param Event number The event ID
 function EVENTS:onEvent(Event)
 
-    if ENUMS.EVENTS[Event.id] then
+    if ENUMS.EVENTS.ID[Event.id] then
 
         local EventData = {}
 
