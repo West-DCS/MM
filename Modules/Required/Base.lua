@@ -32,10 +32,14 @@ function BASE:GetClassName()
     return self.ClassName
 end
 
-function BASE:HandleEvent(eventID, callback)
-    __EVENTS:AddEvent(eventID, self, callback)
+---@param EventID number The event ID to handle.
+---@param Callback function The function to callback on.
+function BASE:HandleEvent(EventID, Callback)
+    __EVENTS:AddEvent(EventID, self, Callback)
 end
 
+---@param Seconds number How many seconds until callback function.
+---@param Callback function The function to callback on.
 function BASE:Schedule(Seconds, Callback, ...)
     timer.scheduleFunction(Callback, ..., timer.getTime() + Seconds)
 
