@@ -16,6 +16,7 @@ function DATABASE:New()
 
     --self:HandleEvent(ENUMS.EVENTS.Birth, self._OnEventBirth)
     self:SearchGroups()
+    self:SearchGroups(true)
     self:SearchZones()
 
     return self
@@ -31,26 +32,36 @@ function DATABASE:Add(Table, Name, class, ...)
     return false
 end
 
-function DATABASE:SearchGroups()
-    local Coalitions = {
-        Red = coalition.getGroups(coalition.side.RED),
-        Blue = coalition.getGroups(coalition.side.BLUE),
-        Neutral = coalition.getGroups(coalition.side.NEUTRAL),
-    }
+function DATABASE:SearchGroups(static)
+    local Coalitions = {}
+
+    if not static then
+        Coalitions.Red = coalition.getGroups(coalition.side.RED)
+        Coalitions.Blue = coalition.getGroups(coalition.side.BLUE)
+        Coalitions.Neutral = coalition.getGroups(coalition.side.NEUTRAL)
+    else
+        Coalitions.Red = coalition.getStaticObjects(coalition.side.RED)
+        Coalitions.Blue = coalition.getStaticObjects(coalition.side.BLUE)
+        Coalitions.Neutral = coalition.getStaticObjects(coalition.side.NEUTRAL)
+    end
 
     for _, data in pairs(Coalitions) do
         for _, group in pairs(data) do
             if group:isExist() then
                 local GroupName = group:getName()
 
-                self:Add(self._Groups, GroupName, GROUP, GroupName)
+                if static then
+                    self:Add(self._Statics, GroupName, STATIC, GroupName)
+                else
+                    self:Add(self._Groups, GroupName, GROUP, GroupName)
 
-                local Units = group:getUnits()
+                    local Units = group:getUnits()
 
-                for _, unit in pairs(Units) do
-                    local UnitName = unit:getName()
+                    for _, unit in pairs(Units) do
+                        local UnitName = unit:getName()
 
-                    self:Add(self._Units, UnitName, UNIT, UnitName)
+                        self:Add(self._Units, UnitName, UNIT, UnitName)
+                    end
                 end
             end
         end
