@@ -16,8 +16,10 @@ end
 
 function TEST:_OnEventBirth(EventData)
     local PlayerName = EventData.IniPlayerName
+    local zone = ZONE:FindByName('Larnaca Logistics Center')
+    local coords = zone:GetVec2()
 
-    self:Log('info', '%s was born!', PlayerName)
+    self:Log('info', '%s coords x= %s, z = %s!', zone:GetName(), coords.x, coords.z)
 
     self:Schedule(10, function()
         GROUP:FindByName('Aerial-1'):Destroy()
