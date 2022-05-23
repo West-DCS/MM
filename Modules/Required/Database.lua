@@ -7,6 +7,7 @@ DATABASE = {
     ClassName = 'DATABASE',
     _Groups = {},
     _Units = {},
+    _Statics = {},
     _Zones = {}
 }
 

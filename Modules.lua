@@ -11,6 +11,7 @@ dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Database.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Object.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Unit.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Group.lua')
+dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Static.lua')
 
 -- Instantiates required Classes.
 __EVENTS = EVENTS:New()
