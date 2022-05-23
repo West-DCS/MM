@@ -65,3 +65,16 @@ function BASE:Log(logType, msg, ...)
 
     return self
 end
+
+--- Log a serialized variable to DCS.log
+---@param Variable any The variable to serialize. Should be a field within a table.
+---@return BASE Returns self.
+function BASE:L(Variable)
+    if not type(Variable) == 'table' then
+        Variable = {Variable}
+    end
+
+    BASE:Log('info', '%30s', ROUTINES.util.oneLineSerialize(Variable))
+
+    return self
+end
