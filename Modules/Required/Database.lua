@@ -15,15 +15,14 @@ function DATABASE:New()
 
     --self:HandleEvent(ENUMS.EVENTS.Birth, self._OnEventBirth)
     self:SearchGroups()
+    self:SearchZones()
 
     return self
 end
 
-function DATABASE:Add(Table, Name, class)
+function DATABASE:Add(Table, Name, class, ...)
     if not Table[Name] then
-        Table[Name] = class:New(Name)
-
-        self:Log('info', 'Adding %s to database.', Name)
+        Table[Name] = class:New(...)
 
         return true
     end
@@ -43,18 +42,26 @@ function DATABASE:SearchGroups()
             if group:isExist() then
                 local GroupName = group:getName()
 
-                self:Log('info', 'GroupName: %s', GroupName)
-
-                self:Add(self._Groups, GroupName, GROUP)
+                self:Add(self._Groups, GroupName, GROUP, GroupName)
 
                 local Units = group:getUnits()
 
                 for _, unit in pairs(Units) do
                     local UnitName = unit:getName()
 
-                    self:Add(self._Units, UnitName, UNIT)
+                    self:Add(self._Units, UnitName, UNIT, UnitName)
                 end
             end
         end
+    end
+end
+
+function DATABASE:SearchZones()
+    local Zones = env.mission.triggers.zones
+
+    for _, zone in pairs(Zones) do
+        local ZoneName = zone.name
+
+        DATABASE:Add(self._Zones, ZoneName, ZONE, zone)
     end
 end
