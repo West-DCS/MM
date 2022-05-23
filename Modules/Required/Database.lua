@@ -14,10 +14,12 @@ DATABASE = {
 function DATABASE:New()
     local self = BASE:Inherit(self, BASE:New())
 
-    --self:HandleEvent(ENUMS.EVENTS.Birth, self._OnEventBirth)
-    self:SearchGroups()
-    self:SearchGroups(true)
-    self:SearchZones()
+    self:HandleEvent(ENUMS.EVENTS.Birth, self._OnBirth)
+    self:HandleEvent(ENUMS.EVENTS.Dead, self._OnGone)
+    self:HandleEvent(ENUMS.EVENTS.Crash, self._OnGone)
+    self:_SearchGroups()
+    self:_SearchGroups(true)
+    self:_SearchZones()
 
     return self
 end
@@ -32,7 +34,17 @@ function DATABASE:Add(Table, Name, class, ...)
     return false
 end
 
-function DATABASE:SearchGroups(static)
+function DATABASE:Remove(Table, Name)
+    if Table[Name] then
+        Table[Name] = nil
+
+        return true
+    end
+
+    return false
+end
+
+function DATABASE:_SearchGroups(static)
     local Coalitions = {}
 
     if not static then
@@ -68,12 +80,34 @@ function DATABASE:SearchGroups(static)
     end
 end
 
-function DATABASE:SearchZones()
+function DATABASE:_SearchZones()
     local Zones = env.mission.triggers.zones
 
     for _, zone in pairs(Zones) do
         local ZoneName = zone.name
 
-        DATABASE:Add(self._Zones, ZoneName, ZONE, zone)
+        self:Add(self._Zones, ZoneName, ZONE, zone)
+    end
+end
+
+function DATABASE:_OnBirth(Event)
+    if Event.IniDCSUnit then
+        if Event.IniObjectCategory == 3 then
+            self:Add(self._Statics, Event.IniDCSUnitName, STATIC, Event.IniDCSUnitName)
+        elseif Event.IniObjectCategory == 1 then
+            self:Add(self._Groups, Event.IniDCSGroupName, STATIC, Event.IniDCSGroupName)
+            self:Add(self._Units, Event.IniDCSUnitName, STATIC, Event.IniDCSUnitName)
+        end
+    end
+end
+
+function DATABASE:_OnGone(Event)
+    if Event.IniDCSUnit then
+        if Event.IniObjectCategory == 3 then
+            self:Remove(self._Statics, Event.IniDCSUnitName)
+        elseif Event.IniObjectCategory == 1 then
+            self:Remove(self._Groups, Event.IniDCSGroupName)
+            self:Remove(self._Units, Event.IniDCSUnitName)
+        end
     end
 end
