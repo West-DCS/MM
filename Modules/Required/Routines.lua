@@ -29,6 +29,64 @@ ROUTINES.util.deepCopy = function(object)
     return _copy(object)
 end
 
+function ROUTINES.util.basicSerialize(var)
+    if var == nil then
+        return "\"\""
+    else
+        if ((type(var) == 'number') or
+                (type(var) == 'boolean') or
+                (type(var) == 'function') or
+                (type(var) == 'table') or
+                (type(var) == 'userdata') ) then
+            return tostring(var)
+        elseif type(var) == 'string' then
+            var = string.format('%q', var)
+            return var
+        end
+    end
+
+end
+
+function ROUTINES.util.oneLineSerialize(tbl)
+    if type(tbl) == 'table' then
+
+        local tbl_str = {}
+
+        tbl_str[#tbl_str + 1] = '{ '
+
+        for ind, val in pairs(tbl) do
+            if type(ind) == "number" then
+                tbl_str[#tbl_str + 1] = '['
+                tbl_str[#tbl_str + 1] = tostring(ind)
+                tbl_str[#tbl_str + 1] = '] = '
+            else
+                tbl_str[#tbl_str + 1] = '['
+                tbl_str[#tbl_str + 1] = ROUTINES.util.basicSerialize(ind)
+                tbl_str[#tbl_str + 1] = '] = '
+            end
+
+            if ((type(val) == 'number') or (type(val) == 'boolean')) then
+                tbl_str[#tbl_str + 1] = tostring(val)
+                tbl_str[#tbl_str + 1] = ', '
+            elseif type(val) == 'string' then
+                tbl_str[#tbl_str + 1] = ROUTINES.util.basicSerialize(val)
+                tbl_str[#tbl_str + 1] = ', '
+            elseif type(val) == 'nil' then
+                tbl_str[#tbl_str + 1] = 'nil, '
+            elseif type(val) == 'table' then
+                tbl_str[#tbl_str + 1] = ROUTINES.util.oneLineSerialize(val)
+                tbl_str[#tbl_str + 1] = ', '
+            else
+
+            end
+        end
+        tbl_str[#tbl_str + 1] = '}'
+        return table.concat(tbl_str)
+    else
+        return  ROUTINES.util.basicSerialize(tbl)
+    end
+end
+
 ---@param fileName string The file name to test.
 ---@return boolean Is file?
 ROUTINES.file.isFile = function(fileName)
