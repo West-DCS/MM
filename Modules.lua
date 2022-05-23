@@ -1,4 +1,5 @@
 -- Required Modules, do not touch. Order is important.
+dofile(lfs.writedir() .. '/Scripts/MSF/Config/Config.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Enums.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Routines.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Base.lua')
@@ -11,7 +12,7 @@ dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Object.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Unit.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Group.lua')
 
--- Instantiates event dispatcher here in case optional modules handle events.
+-- Instantiates required Classes.
 __EVENTS = EVENTS:New()
 __DATABASE = DATABASE:New()
 
