@@ -2,6 +2,8 @@
 ---@description Group object wrapper.
 ---@created 22MAY22
 
+---@type OBJECT
+---@class GROUP
 GROUP = {
     ClassName = 'Group',
 }
