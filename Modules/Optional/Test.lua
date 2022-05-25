@@ -22,12 +22,14 @@ function TEST:_OnEventBirth(EventData)
         self.iterations = self.iterations + 1
 
         local zone = ZONE:FindByName('Larnaca Logistics Center')
+
         local farp = SPAWN:NewStaticFromType('Invisible FARP', 'Heliports', 80, nil,
                 nil, 'invisiblefarp', true)
 
         farp:SpawnFromZone(zone)
 
-        self:Schedule(10, function() farp:Destroy() end)
+        local group = SPAWN:NewGroundFromType('LAV-25', 80, 'test2'):SpawnFromZone(zone)
+
         self.iterations = self.iterations + 1
     end
 
