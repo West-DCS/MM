@@ -2,6 +2,8 @@
 ---@description DCS object helper functions.
 ---@created 21MAY22
 
+---@type BASE
+---@class OBJECT
 OBJECT = {
     ClassName = 'OBJECT',
     Name = '',
