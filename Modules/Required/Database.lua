@@ -10,6 +10,7 @@ DATABASE = {
     _Units = {},
     _Statics = {},
     _Zones = {},
+    _Airbases = {},
     _GroupIterator = 1
 }
 
@@ -19,8 +20,9 @@ function DATABASE:New()
     self:HandleEvent(ENUMS.EVENTS.Birth, self._OnBirth)
     self:HandleEvent(ENUMS.EVENTS.Dead, self._OnGone)
     self:HandleEvent(ENUMS.EVENTS.Crash, self._OnGone)
-    self:_SearchGroups()
-    self:_SearchGroups(true)
+    self:_SearchGroups('Groups')
+    self:_SearchGroups('Statics')
+    self:_SearchGroups('Airbases')
     self:_SearchZones()
 
     return self
@@ -46,17 +48,21 @@ function DATABASE:Remove(Table, Name)
     return false
 end
 
-function DATABASE:_SearchGroups(static)
+function DATABASE:_SearchGroups(search)
     local Coalitions = {}
 
-    if not static then
+    if search == 'Groups' then
         Coalitions.Red = coalition.getGroups(coalition.side.RED)
         Coalitions.Blue = coalition.getGroups(coalition.side.BLUE)
         Coalitions.Neutral = coalition.getGroups(coalition.side.NEUTRAL)
-    else
+    elseif search == 'Statics' then
         Coalitions.Red = coalition.getStaticObjects(coalition.side.RED)
         Coalitions.Blue = coalition.getStaticObjects(coalition.side.BLUE)
         Coalitions.Neutral = coalition.getStaticObjects(coalition.side.NEUTRAL)
+    elseif search == 'Airbases' then
+        Coalitions.Red = coalition.getAirbases(coalition.side.RED)
+        Coalitions.Blue = coalition.getAirbases(coalition.side.BLUE)
+        Coalitions.Neutral = coalition.getAirbases(coalition.side.NEUTRAL)
     end
 
     for _, data in pairs(Coalitions) do
@@ -64,9 +70,11 @@ function DATABASE:_SearchGroups(static)
             if group:isExist() then
                 local GroupName = group:getName()
 
-                if static then
+                if search == 'Statics' then
                     self:Add(self._Statics, GroupName, STATIC, GroupName)
-                else
+                elseif search == 'Airbases' then
+                    self:Add(self._Airbases, GroupName, AIRBASE, GroupName)
+                elseif search == 'Groups' then
                     self:Add(self._Groups, GroupName, GROUP, GroupName)
 
                     local Units = group:getUnits()
