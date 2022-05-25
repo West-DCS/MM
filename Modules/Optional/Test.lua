@@ -28,7 +28,13 @@ function TEST:_OnEventBirth(EventData)
 
         farp:SpawnFromZone(zone)
 
-        local group = SPAWN:NewGroundFromType('LAV-25', 80, 'test2'):SpawnFromZone(zone)
+        local airbase = AIRBASE:FindByName('FARP#1'):GetVec3()
+        local group = SPAWN:NewGroundFromType('LAV-25', 80, 'test2'):SpawnFromVec2(airbase)
+
+        self:Schedule(10, function()
+            local larnaca = AIRBASE:FindByName('Larnaca'):GetCoalition()
+            self:Log('info', 'Larnaca is owned by %s', larnaca)
+        end)
 
         self.iterations = self.iterations + 1
     end
