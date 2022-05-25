@@ -142,6 +142,7 @@ function SPAWN:SpawnFromVec2(Vec2)
 
         if self.FARP then
             coalition.addGroup(self.Country, -1, self:_GetTemplate())
+            __DATABASE:Add(__DATABASE._Airbases, self.Name, AIRBASE, self.Name)
         else
             coalition.addStaticObject(self.Country, self:_GetTemplate())
         end
