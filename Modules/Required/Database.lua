@@ -2,13 +2,15 @@
 ---@description Databasing of DCS objects.
 ---@created 21MAY22
 
+---@type BASE
 ---@class DATABASE
 DATABASE = {
     ClassName = 'DATABASE',
     _Groups = {},
     _Units = {},
     _Statics = {},
-    _Zones = {}
+    _Zones = {},
+    _GroupIterator = 1
 }
 
 function DATABASE:New()
@@ -110,4 +112,8 @@ function DATABASE:_OnGone(Event)
             self:Remove(self._Units, Event.IniDCSUnitName)
         end
     end
+end
+
+function DATABASE:_Iterate()
+    self._GroupIterator = self._GroupIterator + 1
 end
