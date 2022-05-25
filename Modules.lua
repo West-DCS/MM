@@ -6,6 +6,7 @@ dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Base.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Events.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Zone.lua')
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Database.lua')
+dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Spawn.lua')
 
 -- Object Classes
 dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Object.lua')
