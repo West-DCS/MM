@@ -23,8 +23,6 @@ function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDri
     local self = BASE:Inherit(self, BASE:New())
 
     self.Name = Name or 'Group#' .. __DATABASE._GroupIterator
-    __DATABASE:_Iterate()
-
     self.Static = false
     self.Category = Group.Category.GROUND
     self.TypeUnit = TypeUnit or 'Leopard-2'
@@ -35,8 +33,9 @@ function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDri
     self.Args = Args or {}
     self.Units = {}
 
-    self:AddUnit(self.TypeUnit, self.Skill, self.Heading, self.CanDrive, self.Args)
+    self:AddUnit()
 
+    __DATABASE:_Iterate()
     return self
 end
 
@@ -56,7 +55,6 @@ function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, S
     local self = BASE:Inherit(self, BASE:New())
 
     self.Name = 'Static#' .. __DATABASE._GroupIterator
-
 
     self.Static = true
     self.Category = Category or 'Structures'
@@ -92,21 +90,21 @@ end
 ---@param Args table Optional Hard set values. eg. {x = number, y = number}
 ---@return SPAWN Returns self.
 function SPAWN:AddUnit(TypeUnit, Skill, Heading, CanDrive, Args)
-    local Unit = {
-        ["type"] = TypeUnit,
-        ["skill"] = Skill or self.Skill,
-        ["name"] = string.format('%s-%s', self.Name, self.UnitIterator),
-        ["playerCanDrive"] = CanDrive or self.CanDrive,
-        ["heading"] = Heading or self.Heading
-    }
+    local unit = {}
+
+    unit.type = TypeUnit or self.TypeUnit
+    unit.skill = Skill or self.Skill
+    unit.name = string.format('%s-%s', self.Name, self.UnitIterator)
+    unit.playerCanDrive = CanDrive or self.CanDrive
+    unit.heading = Heading or self.Heading
 
     if Args then
         for key, value in pairs(Args) do
-            Unit[key] = value
+            unit[key] = value
         end
     end
 
-    table.insert(self.Units, Unit)
+    table.insert(self.Units, unit)
     self:_Iterate()
 
     return self
@@ -140,12 +138,15 @@ function SPAWN:SpawnFromVec2(Vec2)
 
         return GROUP:FindByName(self.Name)
     else
+        local static = __DATABASE:Add(__DATABASE._Statics, self.Name, STATIC, self.Name)
+
         if self.FARP then
             coalition.addGroup(self.Country, -1, self:_GetTemplate())
         else
             coalition.addStaticObject(self.Country, self:_GetTemplate())
         end
-        return STATIC:FindByName(self.Name)
+
+        return static
     end
 end
 

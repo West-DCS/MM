@@ -30,10 +30,10 @@ function DATABASE:Add(Table, Name, class, ...)
     if not Table[Name] then
         Table[Name] = class:New(...)
 
-        return true
+        return Table[Name]
     end
 
-    return false
+    return nil
 end
 
 function DATABASE:Remove(Table, Name)
