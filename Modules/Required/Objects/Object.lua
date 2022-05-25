@@ -104,3 +104,13 @@ function OBJECT:InAir()
 
     return nil
 end
+
+function OBJECT:GetCoalition()
+    local DCSObject = self:GetDCSObject()
+
+    if DCSObject then
+        return DCSObject:getCoalition()
+    end
+
+    return nil
+end
