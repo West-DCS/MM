@@ -160,6 +160,17 @@ function SPAWN:SpawnFromZone(Zone)
     return self:SpawnFromVec2(Vec2)
 end
 
+function SPAWN:SpawnFromZoneRandomVec2(Zone, SurfaceType)
+    local Vec2 = Zone:GetRandomVec2(SurfaceType)
+
+    if Vec2 then
+        self:Log('info', 'Vec2.x: %s, Vec2.z: %s', Vec2.x, Vec2.z)
+        return self:SpawnFromVec2(Vec2)
+    end
+
+    return nil
+end
+
 --- Modify the SPAWN class default offsets.
 ---@param Args table The offset values to change. eg. {x = 10, y = -5} or {x = 2}.
 ---@return SPAWN Returns self.
