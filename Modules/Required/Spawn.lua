@@ -96,7 +96,7 @@ function SPAWN:AddUnit(TypeUnit, Skill, Heading, CanDrive, Args)
     unit.skill = Skill or self.Skill
     unit.name = string.format('%s-%s', self.Name, self.UnitIterator)
     unit.playerCanDrive = CanDrive or self.CanDrive
-    unit.heading = Heading or self.Heading
+    unit.heading = Heading or math.rad(math.random(0, 359))
 
     if Args then
         for key, value in pairs(Args) do
