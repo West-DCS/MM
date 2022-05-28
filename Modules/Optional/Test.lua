@@ -21,20 +21,26 @@ function TEST:_OnEventBirth(EventData)
     if self.iterations == 0 then
         self.iterations = self.iterations + 1
 
-        local zone = ZONE:FindByName('Larnaca Logistics Center')
+        local zone1 = ZONE:FindByName('Test1')
+        local zone2 = ZONE:FindByName('Test2')
 
-        local farp = SPAWN:NewStaticFromType('Invisible FARP', 'Heliports', 80, nil,
-                nil, 'invisiblefarp', true)
+        --if land.getSurfaceType(zone:GetVec2()) == land.SurfaceType.ROAD then
+        --    self:Log('info', 'TYPE ROAD')
+        --end
 
-        farp:SpawnFromZone(zone)
+        --local farp = SPAWN:NewStaticFromType('Invisible FARP', 'Heliports', 80, nil,
+        --        nil, 'invisiblefarp', true):SpawnFromZone(zone)
+        --
+        --self:Schedule(10, function(farp) farp:Destroy() end, farp)
 
-        local airbase = AIRBASE:FindByName('FARP#1'):GetVec3()
-        local group = SPAWN:NewGroundFromType('LAV-25', 80, 'test2'):SpawnFromVec2(airbase)
+        for i=1, 50 do
+            SPAWN:NewGroundFromType('Soldier M4', 80):SpawnFromZoneRandomVec2(zone1, land.SurfaceType.LAND)
+            SPAWN:NewGroundFromType('Infantry AK ver2', 81):SpawnFromZoneRandomVec2(zone2, land.SurfaceType.LAND)
+        end
 
-        self:Schedule(10, function()
-            local larnaca = AIRBASE:FindByName('Larnaca'):GetCoalition()
-            self:Log('info', 'Larnaca is owned by %s', larnaca)
-        end)
+        zone1:Illuminate()
+        --zone2:Illuminate()
+
 
         self.iterations = self.iterations + 1
     end
