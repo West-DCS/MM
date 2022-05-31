@@ -20,4 +20,4 @@ __EVENTS = EVENTS:New()
 __DATABASE = DATABASE:New()
 
 -- Optional and User Modules, do touch. '--' To comment out and prevent running.
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Optional/Test.lua')
+--dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Optional/Test.lua')

@@ -90,7 +90,7 @@ end
 ---@param fileName string The file name to test.
 ---@return boolean Is file?
 ROUTINES.file.isFile = function(fileName)
-    if lfs.attributes(fileName) then
+    if lfs.attributes(fileName, "mode") == "file" then
         return true
         else
         return false 
