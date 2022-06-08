@@ -12,10 +12,16 @@ dofile(Directory .. 'Modules.lua')
 
 -- Load User Modules (non-recursively, unordered)
 for file in lfs.dir(UserDirectory) do
-    if ROUTINES.file.isFile(file) then
-        if not file == '.' and not file == '..' then
-            BASE:Log('info', 'Loading: %s', file)
-            dofile(file)
+    if ROUTINES.file.isFile(UserDirectory .. file) then
+        BASE:Info('Loading: %s', file)
+
+        local f, err = loadfile(UserDirectory .. file)
+
+        if not f then
+            BASE:Error('Error in file: %s', file)
+            BASE:Error(err)
+        else
+            f()
         end
     end
 end
