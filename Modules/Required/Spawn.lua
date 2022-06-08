@@ -164,7 +164,6 @@ function SPAWN:SpawnFromZoneRandomVec2(Zone, SurfaceType)
     local Vec2 = Zone:GetRandomVec2(SurfaceType)
 
     if Vec2 then
-        self:Log('info', 'Vec2.x: %s, Vec2.z: %s', Vec2.x, Vec2.z)
         return self:SpawnFromVec2(Vec2)
     end
 
