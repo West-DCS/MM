@@ -92,7 +92,7 @@ end
 ROUTINES.file.isFile = function(fileName)
     if lfs.attributes(fileName, "mode") == "file" then
         return true
-        else
+    else
         return false 
     end 
 end
