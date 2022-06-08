@@ -27,6 +27,6 @@ for file in lfs.dir(UserDirectory) do
 end
 
 -- Log certifies that at least all modules loaded.
-BASE:Log('info', '%s initialization finished.', 'MSF')
+BASE:Info('%s initialization finished.', 'MSF')
 
 end
