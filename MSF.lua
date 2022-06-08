@@ -4,7 +4,7 @@
 
 do
 local Directory = lfs.writedir() .. [[Scripts\MSF\]]
-local UserDirectory = Directory .. [[\Modules\User\]]
+local UserDirectory = Directory .. [[Modules\User\]]
 
 -- Load MSF Modules
 dofile(Directory .. 'Modules.lua')
