@@ -3,6 +3,7 @@
 ---@created 16MAY22
 
 do
+
 local Directory = lfs.writedir() .. [[Scripts\MSF\]]
 local UserDirectory = Directory .. [[Modules\User\]]
 
