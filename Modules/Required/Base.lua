@@ -50,7 +50,9 @@ end
 ---@param logType string info, warning, error
 ---@param msg string The message to log.
 ---@return BASE Returns self.
-function BASE:Log(logType, msg, ...)
+function BASE:Log(msg, logType, ...)
+    logType = logType or 'info'
+
     local write = function(logType, ...)
         logType(string.format('%s: %s', self:GetClassName(), string.format(msg, ...)))
     end
