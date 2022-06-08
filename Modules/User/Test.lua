@@ -33,7 +33,7 @@ function TEST:_OnEventBirth(EventData)
         --
         --self:Schedule(10, function(farp) farp:Destroy() end, farp)
 
-        for i=1, 50 do
+        for _=1, 50 do
             SPAWN:NewGroundFromType('Soldier M4', 80):SpawnFromZoneRandomVec2(zone1, land.SurfaceType.LAND)
             SPAWN:NewGroundFromType('Infantry AK ver2', 81):SpawnFromZoneRandomVec2(zone2, land.SurfaceType.LAND)
         end
