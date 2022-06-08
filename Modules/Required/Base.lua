@@ -24,6 +24,7 @@ function BASE:Inherit(Child, Parent)
     local Child = ROUTINES.util.deepCopy(Child)
 
     setmetatable(Child, {__index = Parent})
+
     return Child
 end
 
@@ -68,6 +69,33 @@ function BASE:Log(msg, logType, ...)
     return self
 end
 
+--- Log an info message to DCS.log
+---@param msg string The message to log.
+---@return BASE Returns self.
+function BASE:Info(msg, ...)
+    self:Log(msg, nil, ...)
+
+    return self
+end
+
+--- Log an error message to DCS.log
+---@param msg string The message to log.
+---@return BASE Returns self.
+function BASE:Error(msg, ...)
+    self:Log(msg, 'error', ...)
+
+    return self
+end
+
+--- Log a warning message to DCS.log
+---@param msg string The message to log.
+---@return BASE Returns self.
+function BASE:Warning(msg, ...)
+    self:Log(msg, 'warning', ...)
+
+    return self
+end
+
 --- Log a serialized variable to DCS.log
 ---@param Variable any The variable to serialize. Should be a field within a table.
 ---@return BASE Returns self.
@@ -76,7 +104,7 @@ function BASE:L(Variable)
         Variable = {Variable}
     end
 
-    BASE:Log('info', '%30s', ROUTINES.util.oneLineSerialize(Variable))
+    self:Log('info', '%30s', ROUTINES.util.oneLineSerialize(Variable))
 
     return self
 end
