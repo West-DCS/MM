@@ -71,8 +71,7 @@ do
             local f = loadfile(File)
 
             if f then
-                f()
-                return true
+                return f()
             end
         end
 
