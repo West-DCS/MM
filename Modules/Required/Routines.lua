@@ -5,9 +5,11 @@
 ---@class ROUTINES
 ---@field public util table Utility functions.
 ---@field public file table File functions.
+---@field public os table OS functions.
 ROUTINES = {}
 ROUTINES.util = {}
 ROUTINES.file = {}
+ROUTINES.os = {}
 
 ---@param object table The object or table to copy.
 ---@return table The new table with copied metatables.
@@ -106,3 +108,8 @@ ROUTINES.file.isDir = function(dirName)
         return false
     end
 end
+
+ROUTINES.os.exec = function(cmd, args)
+    os.execute(string.format('%s %s', cmd, args))
+end
+
