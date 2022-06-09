@@ -109,7 +109,46 @@ ROUTINES.file.isDir = function(dirName)
     end
 end
 
+ROUTINES.file.EDSerialize = function(Name, Value, Level, File)
+    if Level == nil then Level = "" end
+
+    if Level ~= "" then Level = Level .."  " end
+
+    File:write(Level, Name, " = ")
+
+    if type(Value) == "number" or type(Value) == "string" or type(Value) == "boolean" then
+        File:write(ROUTINES.util.basicSerialize(Value), ",\n")
+    elseif type(Value) == "table" then
+        File:write("\n" .. Level .. "{\n") -- create a new table
+
+        for k,v in pairs(Value) do -- serialize its fields
+            local key
+
+            if type(k) == "number" then
+                key = string.format("[%s]", k)
+            else
+                key = string.format("[%q]", k)
+            end
+
+            ROUTINES.file.EDSerialize(key, v, Level.."  ", File)
+        end
+
+        if Level == "" then
+            File:write(Level .."} -- end of ".. Name .."\n")
+        else
+            File:write(Level .."}, -- end of " .. Name .."\n")
+        end
+    end
+end
+
+ROUTINES.file.EDSerializeToFile = function(FilePath, FileName, Table)
+    local File = io.open(FilePath .. FileName, 'w')
+    ROUTINES.file.EDSerialize(FileName, Table, nil, File)
+    File:close()
+end
+
 ROUTINES.os.exec = function(cmd, args)
+    args = args or ''
     os.execute(string.format('%s %s', cmd, args))
 end
 
