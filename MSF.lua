@@ -4,7 +4,12 @@
 
 do
     _MSF = {}
-    local soft = arg[1]
+
+    local soft
+
+    if arg then
+        soft = arg[1]
+    end
 
     if not soft then
         _MSF.Directory = lfs.writedir() .. [[Scripts\MSF\]]
