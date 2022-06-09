@@ -44,7 +44,7 @@ do
                 env.error('Error in file: ' .. File)
                 env.error(err)
             else
-                f()
+                return f()
             end
         end
 
