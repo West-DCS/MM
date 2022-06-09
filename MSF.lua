@@ -88,7 +88,7 @@ do
             if Name then
                 local Repository
 
-                if OutFile ~= nil then
+                if REPOSITORIES then
                     Repository = REPOSITORIES[Name]
                 else
                     REPOSITORIES = {}
