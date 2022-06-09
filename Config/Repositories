@@ -1,7 +1,4 @@
----@author West#9009
----@description Repository list for MSF.
----@created 06JUN22
-
-REPOSITORIES = {
-    ['Persist'] = 'https://github.com/nicelym/MSF_Persist.git'
-}
+REPOSITORIES = 
+{
+    ["Persist"] = "https://github.com/nicelym/MSF_Persist.git",
+} -- end of REPOSITORIES
