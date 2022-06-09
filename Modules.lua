@@ -1,23 +1,20 @@
 -- Required Modules, do not touch. Order is important.
-dofile(lfs.writedir() .. '/Scripts/MSF/Config/Config.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Enums.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Routines.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Base.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Events.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Zone.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Database.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Spawn.lua')
+_MSF:Load('Config.lua', 'Config')
+_MSF:Load('Enums.lua', 'Required')
+_MSF:Load('Routines.lua', 'Required')
+_MSF:Load('Base.lua', 'Required')
+_MSF:Load('Events.lua', 'Required')
+_MSF:Load('Zone.lua', 'Required')
+_MSF:Load('Database.lua', 'Required')
+_MSF:Load('Spawn.lua', 'Required')
 
 -- Object Classes
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Object.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Unit.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Group.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Static.lua')
-dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Required/Objects/Airbase.lua')
+_MSF:Load('Object.lua', 'Objects')
+_MSF:Load('Unit.lua', 'Objects')
+_MSF:Load('Group.lua', 'Objects')
+_MSF:Load('Static.lua', 'Objects')
+_MSF:Load('Airbase.lua', 'Objects')
 
 -- Instantiates required Classes.
 __EVENTS = EVENTS:New()
 __DATABASE = DATABASE:New()
-
--- Optional and User Modules, do touch. '--' To comment out and prevent running.
---dofile(lfs.writedir() .. '/Scripts/MSF/Modules/Optional/Test.lua')
