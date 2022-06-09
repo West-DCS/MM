@@ -66,7 +66,7 @@ do
         _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
         _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Optional\]]
         _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
-        print(_MSF.ConfigDirectory)
+
         function _MSF.Load(File)
             local f = loadfile(File)
 
