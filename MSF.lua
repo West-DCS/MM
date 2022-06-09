@@ -114,11 +114,13 @@ do
                 if not isError then
                     Argument = URL .. [[ ]] .. Destination
 
-                    ROUTINES.os.exec('git clone', Argument)
+                    local status = ROUTINES.os.exec('git clone', Argument)
 
-                    REPOSITORIES[Name] = URL
+                    if not status then
+                        REPOSITORIES[Name] = URL
 
-                    ROUTINES.file.EDSerializeToFile(_MSF.ConfigDirectory, 'REPOSITORIES', REPOSITORIES)
+                        ROUTINES.file.EDSerializeToFile(_MSF.ConfigDirectory, 'REPOSITORIES', REPOSITORIES)
+                    end
                 end
             else
                 print('You must provide a repository to add.')
