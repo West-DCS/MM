@@ -149,6 +149,9 @@ end
 
 ROUTINES.os.exec = function(cmd, args)
     args = args or ''
-    os.execute(string.format('%s %s', cmd, args))
+
+    local status = os.execute(string.format('%s %s', cmd, args))
+
+    return status
 end
 
