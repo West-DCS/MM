@@ -2,8 +2,6 @@
 ---@description Repository list for MSF.
 ---@created 06JUN22
 
-local Repositories = {
+REPOSITORIES = {
     ['Persist'] = 'https://github.com/nicelym/MSF_Persist.git'
 }
-
-return Repositories
