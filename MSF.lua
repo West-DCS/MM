@@ -77,7 +77,7 @@ do
         end
 
         -- Load Routines for external use.
-        _MSF.Load(_MSF.ModulesDirectory .. [[\Required\Routines.lua]])
+        _MSF.Load(_MSF.ModulesDirectory .. [[Required\Routines.lua]])
 
         local OutFile = _MSF.Load(_MSF.ConfigDirectory .. 'REPOSITORIES')
 
