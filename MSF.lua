@@ -84,7 +84,7 @@ do
         end
 
         -- Load Routines for external use.
-        _MSF.Load(_MSF.ModulesDirectory .. [[Required\Routines.lua]])
+        _MSF.Load(_MSF.RequiredDirectory .. 'Routines.lua')
         _MSF.Load(_MSF.ConfigDirectory .. 'REPOSITORIES')
 
         local f = assert(loadstring(_MSF.FetchRepositories()))
