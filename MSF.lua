@@ -8,18 +8,23 @@ do
     local soft
 
     if arg then
+        lfs = require 'lfs'
+
         soft = arg[1]
+
+        _MSF.Directory = lfs.currentdir() .. [[\]]
+    else
+        _MSF.Directory = lfs.writedir() .. [[Scripts\MSF\]]
     end
 
-    if not soft then
-        _MSF.Directory = lfs.writedir() .. [[Scripts\MSF\]]
-        _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
-        _MSF.UserDirectory = _MSF.ModulesDirectory .. [[User\]]
-        _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Optional\]]
-        _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Required\]]
-        _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
-        _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
+    _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
+    _MSF.UserDirectory = _MSF.ModulesDirectory .. [[User\]]
+    _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Optional\]]
+    _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Required\]]
+    _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
+    _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
 
+    if not soft then
         function _MSF:Load(File, Explicit)
             local location = self.UserDirectory .. File
 
@@ -62,11 +67,6 @@ do
         -- Log certifies that at least all modules loaded.
         BASE:Info('%s initialization finished.', 'MSF')
     else
-        _MSF.Directory = io.popen"cd":read'*l' .. [[\]]
-        _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
-        _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Optional\]]
-        _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
-
         function _MSF.Load(File)
             local f = loadfile(File)
 
