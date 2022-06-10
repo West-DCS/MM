@@ -6,10 +6,12 @@
 ---@field public util table Utility functions.
 ---@field public file table File functions.
 ---@field public os table OS functions.
+---@field public os table Git functions.
 ROUTINES = {}
 ROUTINES.util = {}
 ROUTINES.file = {}
 ROUTINES.os = {}
+ROUTINES.git = {}
 
 ---@param object table The object or table to copy.
 ---@return table The new table with copied metatables.
@@ -89,6 +91,16 @@ function ROUTINES.util.oneLineSerialize(tbl)
     end
 end
 
+ROUTINES.util.size = function(table)
+    local size = 0
+
+    for _ in pairs(table) do
+       size = size + 1
+    end
+
+    return size
+end
+
 ---@param fileName string The file name to test.
 ---@return boolean Is file?
 ROUTINES.file.isFile = function(fileName)
@@ -102,7 +114,7 @@ end
 ---@param dirName string The directory name to test.
 ---@return boolean Is directory?
 ROUTINES.file.isDir = function(dirName)
-    if lfs.attributes(dirName:gsub("\\$",""),"mode") == "directory" then
+    if lfs.attributes(dirName, "mode") == "directory" then
         return true
     else
         return false
@@ -155,3 +167,28 @@ ROUTINES.os.exec = function(cmd, args)
     return status
 end
 
+ROUTINES.os.capture = function(cmd)
+    local f = assert(io.popen(cmd, 'r'))
+    local s = assert(f:read('*a'))
+    f:close()
+
+    return s
+end
+
+ROUTINES.os.rmdir = function(dir)
+    return ROUTINES.os.exec(string.format('rd /s/q "%s"', dir))
+end
+
+ROUTINES.git.reset = function(path)
+    return ROUTINES.os.exec(string.format('git -C %s reset -q --hard', path))
+end
+
+ROUTINES.git.update = function(path)
+    ROUTINES.git.reset(path)
+    return ROUTINES.os.exec(string.format('git -C %s pull -qa', path))
+end
+
+ROUTINES.git.clone = function(URL, destination)
+    local argument = string.format('%s "%s"', URL, destination)
+    return ROUTINES.os.exec('git clone -q', argument)
+end
