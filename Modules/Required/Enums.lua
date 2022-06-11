@@ -540,6 +540,8 @@ ENUMS.ReportingName =
   }
 }
 
+world.event.S_EVENT_REMOVE_UNIT = world.event.S_EVENT_MAX + 1
+
 ENUMS.EVENTS = {
     Shot =              world.event.S_EVENT_SHOT,
     Hit =               world.event.S_EVENT_HIT,
@@ -578,6 +580,7 @@ ENUMS.EVENTS = {
     TriggerZone               = world.event.S_EVENT_TRIGGER_ZONE,
     LandingQualityMark        = world.event.S_EVENT_LANDING_QUALITY_MARK,
     BDA                       = world.event.S_EVENT_BDA,
+    Remove                    = world.event.S_EVENT_REMOVE_UNIT,
   }
 
 ENUMS.EVENTS.ID = {
@@ -617,5 +620,6 @@ ENUMS.EVENTS.ID = {
   [world.event.S_EVENT_WEAPON_ADD] = true,
   [world.event.S_EVENT_TRIGGER_ZONE] = true,
   [world.event.S_EVENT_LANDING_QUALITY_MARK] = true,
-  [world.event.S_EVENT_BDA] = true
+  [world.event.S_EVENT_BDA] = true,
+  [world.event.S_EVENT_REMOVE_UNIT] = true
 }
