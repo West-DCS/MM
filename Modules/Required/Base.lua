@@ -104,7 +104,7 @@ function BASE:L(Variable)
         Variable = {Variable}
     end
 
-    self:Log('info', '%30s', ROUTINES.util.oneLineSerialize(Variable))
+    self:Info('%30s', ROUTINES.util.oneLineSerialize(Variable))
 
     return self
 end
