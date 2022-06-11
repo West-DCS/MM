@@ -121,7 +121,6 @@ function DATABASE:_OnGone(Event)
         if Event.IniObjectCategory == 3 then
             self:Remove(self._Statics, Event.IniDCSUnitName)
         elseif Event.IniObjectCategory == 1 then
-            self:Remove(self._Groups, Event.IniDCSGroupName)
             self:Remove(self._Units, Event.IniDCSUnitName)
 
             if Airbase.getByName(Event.IniDCSUnitName) then
