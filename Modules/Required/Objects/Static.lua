@@ -13,7 +13,7 @@ function STATIC:New(Name)
 end
 
 function STATIC:FindByName(Name)
-    local Static = __DATABASE.Statics[Name]
+    local Static = __DATABASE._Statics[Name]
 
     if Static then
         return Static
