@@ -26,6 +26,7 @@ function OBJECT:Destroy()
 
     if DCSObject then
         DCSObject:destroy()
+        self:CreateEventRemoveUnit(timer.getTime(), DCSObject)
     end
 end
 
