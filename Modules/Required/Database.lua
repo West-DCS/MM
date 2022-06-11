@@ -107,6 +107,10 @@ function DATABASE:_OnBirth(Event)
         elseif Event.IniObjectCategory == 1 then
             self:Add(self._Groups, Event.IniDCSGroupName, GROUP, Event.IniDCSGroupName)
             self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName)
+
+            if Airbase.getByName(Event.IniDCSUnitName) then
+                self:Add(self._Airbases, Event.IniDCSUnitName, AIRBASE, Event.IniDCSUnitName)
+            end
         end
     end
 end
@@ -118,6 +122,10 @@ function DATABASE:_OnGone(Event)
         elseif Event.IniObjectCategory == 1 then
             self:Remove(self._Groups, Event.IniDCSGroupName)
             self:Remove(self._Units, Event.IniDCSUnitName)
+
+            if Airbase.getByName(Event.IniDCSUnitName) then
+                self:Remove(self._Airbases, Event.IniDCSUnitName)
+            end
         end
     end
 end
