@@ -35,5 +35,21 @@ function GROUP:GetDCSObject()
 end
 
 function GROUP:GetUnits()
+    local DCSGroup = self:GetDCSObject()
 
+    if DCSGroup then
+        local DCSUnits = DCSGroup:getUnits()
+
+        if DCSUnits then
+            local Units = {}
+
+            for _, unit in ipairs(DCSUnits) do
+                table.insert(Units, UNIT:FindByName(unit:getName()))
+            end
+
+            return Units
+        end
+    end
+
+    return nil
 end
