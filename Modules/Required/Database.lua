@@ -105,8 +105,8 @@ function DATABASE:_OnBirth(Event)
         if Event.IniObjectCategory == 3 then
             self:Add(self._Statics, Event.IniDCSUnitName, STATIC, Event.IniDCSUnitName)
         elseif Event.IniObjectCategory == 1 then
-            self:Add(self._Groups, Event.IniDCSGroupName, STATIC, Event.IniDCSGroupName)
-            self:Add(self._Units, Event.IniDCSUnitName, STATIC, Event.IniDCSUnitName)
+            self:Add(self._Groups, Event.IniDCSGroupName, GROUP, Event.IniDCSGroupName)
+            self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName)
         end
     end
 end
