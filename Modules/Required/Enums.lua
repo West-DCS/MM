@@ -580,7 +580,7 @@ ENUMS.EVENTS = {
     TriggerZone               = world.event.S_EVENT_TRIGGER_ZONE,
     LandingQualityMark        = world.event.S_EVENT_LANDING_QUALITY_MARK,
     BDA                       = world.event.S_EVENT_BDA,
-    Remove                    = world.event.S_EVENT_REMOVE_UNIT,
+    RemoveUnit                = world.event.S_EVENT_REMOVE_UNIT,
   }
 
 ENUMS.EVENTS.ID = {
