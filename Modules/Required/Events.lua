@@ -29,8 +29,8 @@ function EVENTS:onEvent(Event)
         if Event.initiator then
             EventData.IniObjectCategory = Event.initiator:getCategory()
 
-            if Event.IniObjectCategory == Object.Category.STATIC then
-                if event.id ~= 31 and event.id ~= 33 then
+            if EventData.IniObjectCategory == Object.Category.STATIC then
+                if Event.id ~= 31 and Event.id ~= 33 then
                     EventData.IniDCSUnit = Event.initiator
                     EventData.IniDCSUnitName = EventData.IniDCSUnit:getName()
                     EventData.IniCoalition = EventData.IniDCSUnit:getCoalition()
@@ -76,7 +76,7 @@ function EVENTS:onEvent(Event)
 
                 if EventData.TgtObjectCategory == Object.Category.STATIC then
                     EventData.TgtDCSUnit = Event.target
-                    if Event.target:isExist() and Event.id ~= 33 then
+                    if EventData.TgtDCSUnit:isExist() and Event.id ~= 33 then
                         EventData.TgtDCSUnitName = EventData.TgtDCSUnit:getName()
                         EventData.TgtCoalition = EventData.TgtDCSUnit:getCoalition()
                         EventData.TgtCategory = EventData.TgtDCSUnit:getDesc().category
@@ -84,7 +84,7 @@ function EVENTS:onEvent(Event)
                     end
                 end
 
-                if Event.TgtObjectCategory == Object.Category.SCENERY then
+                if EventData.TgtObjectCategory == Object.Category.SCENERY then
                     EventData.TgtDCSUnit = Event.target
                     EventData.TgtDCSUnitName = EventData.TgtDCSUnit:getName()
                     EventData.TgtCategory = EventData.TgtDCSUnit:getDesc().category
