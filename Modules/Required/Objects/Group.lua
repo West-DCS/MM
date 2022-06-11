@@ -34,6 +34,22 @@ function GROUP:GetDCSObject()
     return nil
 end
 
+function GROUP:Destroy()
+    local DCSGroup = self:GetDCSObject()
+
+    if DCSGroup then
+        local Units = self:GetUnits()
+
+        if Units then
+            for _, unit in ipairs(Units) do
+                unit:Destroy()
+            end
+        end
+
+        DCSGroup:destroy()
+    end
+end
+
 function GROUP:GetUnits()
     local DCSGroup = self:GetDCSObject()
 
