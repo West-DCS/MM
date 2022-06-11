@@ -116,5 +116,5 @@ function BASE:CreateEventRemoveUnit(Time, Initiator)
         initiator = Initiator
     }
 
-    world.onEvent( Event)
+    world.onEvent(Event)
 end
