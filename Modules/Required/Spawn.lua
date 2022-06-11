@@ -138,16 +138,17 @@ function SPAWN:SpawnFromVec2(Vec2)
 
         return GROUP:FindByName(self.Name)
     else
-        local static = __DATABASE:Add(__DATABASE._Statics, self.Name, STATIC, self.Name)
-
         if self.FARP then
             coalition.addGroup(self.Country, -1, self:_GetTemplate())
             __DATABASE:Add(__DATABASE._Airbases, self.Name, AIRBASE, self.Name)
+            __DATABASE:Add(__DATABASE._Statics, self.Name, STATIC, self.Name)
+
+            return STATIC:FindByName(self.Name)
         else
             coalition.addStaticObject(self.Country, self:_GetTemplate())
-        end
 
-        return static
+            return STATIC:FindByName(self.Name)
+        end
     end
 end
 
