@@ -26,8 +26,20 @@ function TEST:Test1()
     return self
 end
 
+function TEST:Test2()
+    local group = GROUP:FindByName('GroupTest')
+    local units = group:GetUnits()
+
+    for _, unit in ipairs(units) do
+        self:L(unit:GetVec3())
+    end
+
+    self:Schedule(10, function() group:Destroy() end)
+    return self
+end
+
 function TEST:OnEventBirth(EventData)
     self:Info('Name: %s', EventData.IniDCSUnitName)
 end
 
-TEST:New():Test1()
+TEST:New():Test2()
