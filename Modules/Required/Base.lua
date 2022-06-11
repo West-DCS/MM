@@ -108,3 +108,13 @@ function BASE:L(Variable)
 
     return self
 end
+
+function BASE:CreateEventRemoveUnit(Time, Initiator)
+    local Event = {
+        id = ENUMS.EVENTS.RemoveUnit,
+        time = Time,
+        initiator = Initiator
+    }
+
+    world.onEvent( Event)
+end
