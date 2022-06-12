@@ -1,5 +1,5 @@
 ---@author West#9009
----@description Test Module.
+---@description Static Set module. The set only returns collections that existed at the time of installation.
 ---@created 20MAY22
 
 ---@type BASE
@@ -7,7 +7,7 @@ SET = {
     ClassName = 'SET'
 }
 
-function SET:New(Type)
+function SET:CreateFrom(Type)
     local self = BASE:Inherit(self, BASE:New())
 
     local Classes = {
@@ -26,12 +26,18 @@ function SET:New(Type)
     return self
 end
 
-function SET:FilterName(RegEx)
-    for key, object in pairs(self.Class) do
-        local name = object:GetName()
+function SET:RemoveByName(Name)
+    if self.Class[Name] then
+        self.Class[Name] = nil
+    end
 
-        if not string.match(name, RegEx) then
-            self.Class[key] = nil
+    return self
+end
+
+function SET:FilterName(RegEx)
+    for Name, _ in pairs(self.Class) do
+        if not string.match(Name, RegEx) then
+            self:RemoveByName(Name)
         end
     end
 
@@ -39,13 +45,13 @@ function SET:FilterName(RegEx)
 end
 
 function SET:FilterCategory(Category)
-    for key, object in pairs(self.Class) do
-        if not object.GetCategory then break end
+    for Name, Object in pairs(self.Class) do
+        if not Object.GetCategory then break end
 
-        local ObjectCategory = object:GetCategory()
+        local ObjectCategory = Object:GetCategory()
 
         if Category ~= ObjectCategory then
-            self.Class[key] = nil
+            self:RemoveByName(Name)
         end
     end
 
