@@ -7,7 +7,8 @@
 ---@field public ClassName string The name of the class.
 ---@field public self BASE Self reference.
 BASE = {
-    ClassName = 'BASE'
+    ClassName = 'BASE',
+    Schedules = {}
 }
 
 --- Initialize a new instance.
@@ -43,6 +44,45 @@ end
 ---@param Callback function The function to callback on.
 function BASE:Schedule(Seconds, Callback, ...)
     timer.scheduleFunction(Callback, ..., timer.getTime() + Seconds)
+
+    return self
+end
+
+---@param Repeat number How many seconds until callback function is run, and how many seconds thereafter.
+---@param Callback function The function to callback on.
+---@return function Returns a function to serve as the ID of the scheduler.
+function BASE:ScheduleRepeat(Repeat, Callback, ...)
+    self.Schedules[Callback] = true
+
+    timer.scheduleFunction(function(Table, Time)
+        local callback = Table[1]
+        local args = Table[2]
+
+        callback(args)
+
+        if not self.Schedules[Callback] then return nil end
+
+        return Time + Repeat
+
+    end, { Callback, ... }, timer.getTime() + Repeat)
+
+    return Callback
+end
+
+---@param ScheduleID function The function to stop.
+function BASE:ScheduleStop(ScheduleID)
+    if self.Schedules[ScheduleID] then
+        self.Schedules[ScheduleID] = nil
+    end
+
+    return self
+end
+
+--- Stop all scheduled functions in this class.
+function BASE:ScheduleStopAll()
+    for key, _ in pairs(self.Schedules) do
+        self.Schedules[key] = nil
+    end
 
     return self
 end
