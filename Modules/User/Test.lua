@@ -14,6 +14,7 @@ function TEST:New()
     return self
 end
 
+-- SPAWN IN ZONE TEST
 function TEST:Test1()
     local zone1 = ZONE:FindByName('Test1')
 
@@ -26,6 +27,7 @@ function TEST:Test1()
     return self
 end
 
+-- GET UNIT AND GROUP DESTROY TEST
 function TEST:Test2()
     local group = GROUP:FindByName('GroupTest')
     local units = group:GetUnits()
@@ -38,6 +40,7 @@ function TEST:Test2()
     return self
 end
 
+-- SET TEST
 function TEST:Test3()
     SET:New('Zones'):FilterCategory(Group.Category.SHIP):ForEach(function(group)
         self:Info(group:GetName())
