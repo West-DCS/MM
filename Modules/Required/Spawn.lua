@@ -89,12 +89,12 @@ end
 ---@param CanDrive boolean Optional Can the unit be player driven.
 ---@param Args table Optional Hard set values. eg. {x = number, y = number}
 ---@return SPAWN Returns self.
-function SPAWN:AddUnit(TypeUnit, Skill, Heading, CanDrive, Args)
+function SPAWN:AddUnit(TypeUnit, Name, Skill, Heading, CanDrive, Args)
     local unit = {}
 
     unit.type = TypeUnit or self.TypeUnit
     unit.skill = Skill or self.Skill
-    unit.name = string.format('%s-%s', self.Name, self.UnitIterator)
+    unit.name = Name or string.format('%s-%s', self.Name, self.UnitIterator)
     unit.playerCanDrive = CanDrive or self.CanDrive
     unit.heading = Heading or math.rad(math.random(0, 359))
 
