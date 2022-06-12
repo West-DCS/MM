@@ -132,6 +132,8 @@ end
 
 function DATABASE:_Iterate()
     self._GroupIterator = self._GroupIterator + 1
+
+    return self._GroupIterator - 1
 end
 
 function DATABASE:GetGroups()
