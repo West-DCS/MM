@@ -84,6 +84,7 @@ end
 
 --- Add units before spawning to the instantiated SPAWN class. Works only for non-static objects.
 ---@param TypeUnit string Optional The type name of the unit to spawn.
+---@param Name string Optional The Name of the unit to spawn.
 ---@param Skill string Optional The skill of the unit to spawn. {'Excellent', 'High', 'Good', 'Average', 'Random'}
 ---@param Heading number Optional The heading to spawn in radians.
 ---@param CanDrive boolean Optional Can the unit be player driven.
