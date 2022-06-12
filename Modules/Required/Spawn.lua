@@ -39,6 +39,19 @@ function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDri
     return self
 end
 
+function SPAWN:NewEmptyGroundGroup(Name, Country, Args)
+    local self = BASE:Inherit(self, BASE:New())
+
+    self.Name = Name or 'Group#' .. __DATABASE:_Iterate()
+    self.Static = false
+    self.Category = Group.Category.GROUND
+    self.Country = Country or country.id.USA
+    self.Args = Args or {}
+    self.Units = {}
+
+    return self
+end
+
 --- Create a new static object SPAWN class from a type name.
 ---@param TypeUnit string Optional The type name of the unit to spawn.
 ---@param Category string Optional The category of the static object. eg. 'Heliports'.
