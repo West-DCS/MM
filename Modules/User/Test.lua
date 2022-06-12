@@ -38,8 +38,14 @@ function TEST:Test2()
     return self
 end
 
+function TEST:Test3()
+    SET:New('Zones'):FilterCategory(Group.Category.SHIP):ForEach(function(group)
+        self:Info(group:GetName())
+    end, self)
+end
+
 function TEST:OnEventBirth(EventData)
     self:Info('Name: %s', EventData.IniDCSUnitName)
 end
 
-TEST:New():Test2()
+TEST:New():Test3()
