@@ -35,7 +35,6 @@ function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDri
 
     self:AddUnit()
 
-    __DATABASE:_Iterate()
     return self
 end
 
@@ -91,7 +90,6 @@ function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, S
         self.Name = 'FARP#' .. __DATABASE._GroupIterator
     end
 
-    __DATABASE:_Iterate()
     return self
 end
 
