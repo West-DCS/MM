@@ -115,3 +115,26 @@ function OBJECT:GetCoalition()
 
     return nil
 end
+
+function OBJECT:GetPosition()
+    local DCSObject = self:GetDCSObject()
+
+    if DCSObject then
+        return DCSObject:getPosition()
+    end
+
+    return nil
+end
+
+function OBJECT:GetHeading()
+    local Position = self:GetPosition()
+
+    if Position then
+        local HeadingRad = math.atan2(Position.x.z, Position.x.x)
+        local HeadingDeg = math.deg(HeadingRad)
+
+        return HeadingDeg
+    end
+
+    return nil
+end
