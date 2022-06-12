@@ -56,6 +56,13 @@ do
         -- Load MSF Modules
         dofile(_MSF.Directory .. 'Modules.lua')
 
+        -- Load Optional Modules
+        if REPOSITORIES then
+            for module, _ in pairs(REPOSITORIES) do
+                _MSF:Load(string.format([[%s\Module.lua]], module), 'Optional')
+            end
+        end
+
         -- Load User Modules (non-recursively, unordered)
         for file in lfs.dir(_MSF.UserDirectory) do
             if ROUTINES.file.isFile(_MSF.UserDirectory .. file) then
