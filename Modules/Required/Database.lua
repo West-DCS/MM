@@ -133,3 +133,23 @@ end
 function DATABASE:_Iterate()
     self._GroupIterator = self._GroupIterator + 1
 end
+
+function DATABASE:GetGroups()
+    return self._Groups
+end
+
+function DATABASE:GetUnits()
+    return self._Units
+end
+
+function DATABASE:GetZones()
+    return self._Zones
+end
+
+function DATABASE:GetAirbases()
+    return self._Airbases
+end
+
+function DATABASE:GetStatics()
+    return self._Statics
+end
