@@ -47,8 +47,14 @@ function TEST:Test3()
     end, self)
 end
 
+-- SCHEDULE REPEAT TEST
+function TEST:Test4()
+    local schedule = self:ScheduleRepeat(1, function(arg, arg2) self:L({arg, arg2}) end, 'three', 'two')
+    self:Schedule(10, function() self:ScheduleStop(schedule) end)
+end
+
 function TEST:OnEventBirth(EventData)
     self:Info('Name: %s', EventData.IniDCSUnitName)
 end
 
-TEST:New():Test3()
+TEST:New():Test4()
