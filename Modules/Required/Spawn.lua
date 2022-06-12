@@ -22,7 +22,7 @@ SPAWN = {
 function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDrive, Args)
     local self = BASE:Inherit(self, BASE:New())
 
-    self.Name = Name or 'Group#' .. __DATABASE._GroupIterator
+    self.Name = Name or 'Group#' .. __DATABASE:_Iterate()
     self.Static = false
     self.Category = Group.Category.GROUND
     self.TypeUnit = TypeUnit or 'Leopard-2'
@@ -54,7 +54,7 @@ end
 function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, ShapeFile, FARP, Callsign, Freq, Mod)
     local self = BASE:Inherit(self, BASE:New())
 
-    self.Name = 'Static#' .. __DATABASE._GroupIterator
+    self.Name = 'Static#' .. __DATABASE:_Iterate()
 
     self.Static = true
     self.Category = Category or 'Structures'
