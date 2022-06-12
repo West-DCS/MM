@@ -41,3 +41,13 @@ function UNIT:GetPlayerName()
 
     return nil
 end
+
+function UNIT:GetCountry()
+    local DCSObject = self:GetDCSObject()
+
+    if DCSObject then
+        return DCSObject:getCountry()
+    end
+
+    return nil
+end
