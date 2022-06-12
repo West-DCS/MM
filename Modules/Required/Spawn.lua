@@ -117,6 +117,8 @@ function SPAWN:SpawnFromVec2(Vec2)
     self.Vec2 = Vec2
 
     if not self.Static then
+        if ROUTINES.util.size(self.Units) == 0 then return end
+
         for i, unit in ipairs(self.Units) do
 
             if i == 1 then
