@@ -42,7 +42,7 @@ end
 
 -- SET TEST
 function TEST:Test3()
-    SET:New('Zones'):FilterCategory(Group.Category.SHIP):ForEach(function(group)
+    SET:CreateFrom('Zones'):FilterCategory(Group.Category.SHIP):ForEach(function(group)
         self:Info(group:GetName())
     end, self)
 end
