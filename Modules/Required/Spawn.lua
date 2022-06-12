@@ -110,6 +110,13 @@ function SPAWN:AddUnit(TypeUnit, Name, Skill, Heading, CanDrive, Args)
     return self
 end
 
+--- Spawn a group without provided coordinates. All units must be built with coordinates for this to work.
+function SPAWN:_SpawnGroup()
+    coalition.addGroup(self.Country, self.Category, self:_GetTemplate())
+
+    return GROUP:FindByName(self.Name)
+end
+
 --- Spawn the GROUP or STATIC object into the mission environment with a Vec2 coordinate.
 ---@param Vec2 Vec2 The coordinate in which to spawn the GROUP or STATIC.
 ---@return STATIC|GROUP Returns a GROUP or STATIC.
