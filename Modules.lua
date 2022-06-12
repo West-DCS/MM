@@ -1,5 +1,6 @@
 -- Required Modules, do not touch. Order is important.
 _MSF:Load('Config.lua', 'Config')
+_MSF:Load('REPOSITORIES', 'Config')
 _MSF:Load('Enums.lua', 'Required')
 _MSF:Load('Routines.lua', 'Required')
 _MSF:Load('Base.lua', 'Required')
