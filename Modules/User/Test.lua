@@ -53,8 +53,19 @@ function TEST:Test4()
     self:Schedule(10, function() self:ScheduleStop(schedule) end)
 end
 
+-- PERSISTENCE TEST
+function TEST:Test5()
+    if PERSIST then
+        --GROUP:FindByName('GroupTest2'):SetSave(false)
+
+        PERSIST:Start()
+
+        self:Schedule(10, PERSIST.Stop, PERSIST)
+    end
+end
+
 function TEST:OnEventBirth(EventData)
     self:Info('Name: %s', EventData.IniDCSUnitName)
 end
 
-TEST:New():Test4()
+TEST:New()
