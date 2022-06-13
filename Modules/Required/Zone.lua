@@ -65,6 +65,7 @@ function ZONE:GetRandomVec2(SurfaceType)
             end
 
             world.searchObjects(Object.Category.SCENERY, Sphere, search)
+            world.searchObjects(Object.Category.UNIT, Sphere, search)
 
             if NotValid then
                 return nil
