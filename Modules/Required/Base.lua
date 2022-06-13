@@ -55,12 +55,12 @@ function BASE:ScheduleRepeat(Repeat, Callback, ...)
     self.Schedules[Callback] = true
 
     timer.scheduleFunction(function(Table, Time)
+        if not self.Schedules[Callback] then return nil end
+
         local callback = Table[1]
         local args = Table[2]
 
         callback(args)
-
-        if not self.Schedules[Callback] then return nil end
 
         return Time + Repeat
 
