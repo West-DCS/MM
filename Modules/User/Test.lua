@@ -56,11 +56,10 @@ end
 -- PERSISTENCE TEST
 function TEST:Test5()
     if PERSIST then
-        --GROUP:FindByName('GroupTest2'):SetSave(false)
+        PERSIST:IgnoreGroup(GROUP:FindByName('GroupTest2'))
+        PERSIST:SetSchedule(1)
 
         PERSIST:Start()
-
-        self:Schedule(10, PERSIST.Stop, PERSIST)
     end
 end
 
@@ -68,4 +67,4 @@ function TEST:OnEventBirth(EventData)
     self:Info('Name: %s', EventData.IniDCSUnitName)
 end
 
-TEST:New()
+TEST:New():Test5()
