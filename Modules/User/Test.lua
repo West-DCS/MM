@@ -63,6 +63,7 @@ function TEST:Test5()
     end
 end
 
+--- MENU TEST
 function TEST:Test6()
     local menu1 = MENU:New('Logistics')
     local menu2 = MENU:New('1')
@@ -77,11 +78,18 @@ function TEST:Test6()
     self:Schedule(10, function() menu2:RemoveFromCoalition(test, coalition.side.RED) end)
 end
 
+--- MESSAGE TEST
+function TEST:Test7()
+    local group = GROUP:FindByName('AAAA')
+    MESSAGE:New('Test', 10, 'MSF', true):ToAll(nil, nil, 'Override')
+end
+
 function TEST:OnEventBirth(EventData)
     if not EventData.IniGroupName == 'AAAA' then return end
 
     self:Info('I was born %s', EventData.IniGroupName)
     self:Test6()
+    self:Test7()
 
 end
 
