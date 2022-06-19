@@ -3,6 +3,7 @@
 ---@created 19JUN22
 
 ---@type BASE
+---@class MESSAGE
 MESSAGE = {
     ClassName = 'MESSAGE'
 }
