@@ -37,7 +37,6 @@ function MESSAGE:_AdjoinPrefix(String)
     if not String then return end
     if not type(String) == 'string' then return end
     if not self.Prefix then return String end
-    if not type(String) == 'string' then return end
 
     return string.format('%s: %s', self.Prefix, String)
 end
