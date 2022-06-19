@@ -160,6 +160,8 @@ function BASE:CreateEventRemoveUnit(Time, Initiator)
     }
 
     world.onEvent(Event)
+
+    return self
 end
 
 --- Get the current time.
