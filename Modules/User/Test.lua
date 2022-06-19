@@ -63,8 +63,26 @@ function TEST:Test5()
     end
 end
 
-function TEST:OnEventBirth(EventData)
-    self:Info('Name: %s', EventData.IniDCSUnitName)
+function TEST:Test6()
+    local menu1 = MENU:New('Logistics')
+    local menu2 = MENU:New('1')
+    local menu3 = MENU:New('2')
+    menu1:AddSubMenu(menu2)
+    local test = function()  BASE:L{'Test'} end
+    menu2:AddCommand('Test', test)
+
+    --local group = GROUP:FindByName('AAAA')
+    menu1:AddToCoalition(coalition.side.RED)
+
+    self:Schedule(10, function() menu2:RemoveFromCoalition(test, coalition.side.RED) end)
 end
 
-TEST:New():Test5()
+function TEST:OnEventBirth(EventData)
+    if not EventData.IniGroupName == 'AAAA' then return end
+
+    self:Info('I was born %s', EventData.IniGroupName)
+    self:Test6()
+
+end
+
+TEST:New()
