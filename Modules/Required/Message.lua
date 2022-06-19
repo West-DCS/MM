@@ -64,7 +64,7 @@ function MESSAGE:ToUnit(Unit, Time, Clear, Message)
 
     local ID = Unit:GetID()
     Time = Time or 10
-    Message = Message or self.Message
+    Message = self:_AdjoinPrefix(Message) or self.Message
     Clear = Clear or self.Clear
 
     trigger.action.outTextForUnit(ID, Message, Time, Clear)
