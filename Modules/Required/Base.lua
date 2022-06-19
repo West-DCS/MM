@@ -149,6 +149,9 @@ function BASE:L(Variable)
     return self
 end
 
+--- Create a remove event to handle.
+---@param Time number The time the event occurred.
+---@param Initiator table The object that initiated the event.
 function BASE:CreateEventRemoveUnit(Time, Initiator)
     local Event = {
         id = ENUMS.EVENTS.RemoveUnit,
