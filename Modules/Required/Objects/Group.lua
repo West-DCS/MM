@@ -69,3 +69,11 @@ function GROUP:GetUnits()
 
     return nil
 end
+
+function GROUP:GetID()
+    local DCSGroup = self:GetDCSObject()
+
+    if not DCSGroup then return end
+
+    return DCSGroup:getID()
+end

@@ -51,3 +51,11 @@ function UNIT:GetCountry()
 
     return nil
 end
+
+function UNIT:GetID()
+    local DCSUnit = self:GetDCSObject()
+
+    if not DCSUnit then return end
+
+    return DCSUnit:getID()
+end
