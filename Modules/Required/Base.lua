@@ -64,7 +64,7 @@ function BASE:ScheduleRepeat(Repeat, Callback, ...)
 
         return Time + Repeat
 
-    end, { Callback, ... }, timer.getTime() + Repeat)
+    end, { Callback, ... }, self:Now() + Repeat)
 
     return Callback
 end
@@ -157,4 +157,10 @@ function BASE:CreateEventRemoveUnit(Time, Initiator)
     }
 
     world.onEvent(Event)
+end
+
+--- Get the current time.
+---@return number The current time.
+function BASE:Now()
+    return timer.getTime()
 end
