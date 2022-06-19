@@ -34,6 +34,8 @@ end
 ---@param String string The String to append to self.Prefix
 ---@return string
 function MESSAGE:_AdjoinPrefix(String)
+    if not String then return end
+    if not type(String) == 'string' then return end
     if not self.Prefix then return String end
     if not type(String) == 'string' then return end
 
