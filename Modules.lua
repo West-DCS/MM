@@ -10,6 +10,7 @@ _MSF:Load('Database.lua', 'Required')
 _MSF:Load('Spawn.lua', 'Required')
 _MSF:Load('Set.lua', 'Required')
 _MSF:Load('Menu.lua', 'Required')
+_MSF:Load('Message.lua', 'Required')
 
 -- Object Classes
 _MSF:Load('Object.lua', 'Objects')
