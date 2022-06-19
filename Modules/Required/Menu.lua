@@ -75,7 +75,6 @@ function MENU:_Add(Who)
     end
 
     for _, Command in pairs(self.Commands) do
-        self:L{tostring(Command.Callback)}
         self.Commands[Command.Callback].Ref = AddCommand[Who.Who](self, Command)
     end
 
