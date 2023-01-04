@@ -120,6 +120,19 @@ do
                 return
             end
 
+            if Name == 'hooks' then
+                local Source = string.format('%sMSFGameGui.lua', _MSF.Directory)
+                local Destination = string.format('%s\\Scripts\\Hooks\\MSFGameGui.lua', CONFIG.SavedGames)
+
+                local status = ROUTINES.os.copy(Source, Destination)
+
+                if status == 1 then
+                    print('Error adding hooks.')
+                end
+
+                return
+            end
+
             local Repository
             local Destination
             local URL
