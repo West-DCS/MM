@@ -179,6 +179,11 @@ ROUTINES.os.rmdir = function(dir)
     return ROUTINES.os.exec(string.format('rd /s/q "%s"', dir))
 end
 
+-- ASCII only.
+ROUTINES.os.copy = function(source, destination)
+    return ROUTINES.os.exec(string.format('copy "%s" "%s"', source, destination))
+end
+
 ROUTINES.git.reset = function(path)
     return ROUTINES.os.exec(string.format('git -C %s reset -q --hard', path))
 end
