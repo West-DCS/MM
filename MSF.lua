@@ -90,6 +90,9 @@ do
             return ROUTINES.os.capture(string.format('curl -s -H %s', argument))
         end
 
+        --Load Config file
+        _MSF.Load(_MSF.ConfigDirectory .. 'Config.lua')
+
         -- Load Routines for external use.
         _MSF.Load(_MSF.RequiredDirectory .. 'Routines.lua')
         _MSF.Load(_MSF.ConfigDirectory .. 'REPOSITORIES')
