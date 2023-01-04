@@ -132,7 +132,7 @@ function EVENTS:onEvent(Event)
             end
         end
     else
-        self:Log('warning', 'Unknown eventID = %s', Event.id)
+        self:Warning('Unknown eventID = %s', Event.id)
     end
 end
 
