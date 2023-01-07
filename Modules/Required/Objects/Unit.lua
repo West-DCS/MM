@@ -6,8 +6,10 @@ UNIT = {
     ClassName = 'UNIT',
 }
 
-function UNIT:New(Name)
+function UNIT:New(Name, ucid)
     local self = BASE:Inherit(self, OBJECT:New(Name))
+
+    self.ucid = ucid or nil
 
     return self
 end
@@ -58,4 +60,16 @@ function UNIT:GetID()
     if not DCSUnit then return end
 
     return DCSUnit:getID()
+end
+
+function UNIT:GetUCID()
+    return self.ucid
+end
+
+function UNIT:Kick(message)
+    if not self.ucid then return end
+
+    NET:KickByUCID(self.ucid, message or nil)
+
+    return self
 end
