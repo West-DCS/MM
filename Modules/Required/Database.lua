@@ -108,7 +108,14 @@ function DATABASE:_OnBirth(Event)
             self:Add(self._Statics, Event.IniDCSUnitName, STATIC, Event.IniDCSUnitName)
         elseif Event.IniObjectCategory == 1 then
             self:Add(self._Groups, Event.IniDCSGroupName, GROUP, Event.IniDCSGroupName)
-            self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName)
+
+            if Event.IniPlayerName then
+                local NetPlayerInfos = NET:GetAllPlayersInfo()
+                local ucid = NetPlayerInfos[Event.IniPlayerName].ucid
+                self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName, ucid)
+            else
+                self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName)
+            end
 
             if Airbase.getByName(Event.IniDCSUnitName) then
                 self:Add(self._Airbases, Event.IniDCSUnitName, AIRBASE, Event.IniDCSUnitName)
