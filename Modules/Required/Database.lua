@@ -21,6 +21,7 @@ function DATABASE:New()
     self:HandleEvent(ENUMS.EVENTS.Dead, self._OnGone)
     self:HandleEvent(ENUMS.EVENTS.Crash, self._OnGone)
     self:HandleEvent(ENUMS.EVENTS.RemoveUnit, self._OnGone)
+    self:HandleEvent(ENUMS.EVENTS.PlayerLeaveUnit, self._OnGone)
     self:_SearchGroups('Groups')
     self:_SearchGroups('Statics')
     self:_SearchGroups('Airbases')
@@ -122,7 +123,6 @@ function DATABASE:_OnGone(Event)
             self:Remove(self._Statics, Event.IniDCSUnitName)
         elseif Event.IniObjectCategory == 1 then
             self:Remove(self._Units, Event.IniDCSUnitName)
-
             if Airbase.getByName(Event.IniDCSUnitName) then
                 self:Remove(self._Airbases, Event.IniDCSUnitName)
             end
