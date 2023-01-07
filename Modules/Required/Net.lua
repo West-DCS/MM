@@ -149,13 +149,16 @@ function NET:SendChat(Message, To, From)
         -- If UCID
         if string.len(To) == 32 then
             ToPlayerID = self:GetPlayerIDFromUCID(To)
-            self:L{ToPlayerID}
+
+            -- If a players name happens to be 32 characters long.
+            if not ToPlayerID then
+                ToPlayerID = self:GetPlayerIDFromName(To)
+            end
         end
 
         -- If not UCID (A Name with a string length not equal to 32)
         if string.len(To) ~= 32 then
             ToPlayerID = self:GetPlayerIDFromName(To)
-            self:L{ToPlayerID}
         end
 
     elseif type(To) == 'Number' then
@@ -166,6 +169,11 @@ function NET:SendChat(Message, To, From)
         -- If UCID
         if string.len(From) == 32 then
             FromPlayerID = self:GetPlayerIDFromUCID(From)
+
+            -- If a players name happens to be 32 characters.
+            if not FromPlayerID then
+                FromPlayerID = self:GetPlayerIDFromName(From)
+            end
         end
 
         -- If not UCID (A Name with a string length not equal to 32)
