@@ -137,3 +137,14 @@ function MESSAGE:ToAll(Time, Clear, Message)
 
     trigger.action.outText(Message, Time, Clear)
 end
+
+--- Send the message to MP Chat-box with or without recipient. Additional From to appear from other user.
+---@param Message string Optional. Override message to a different message.
+---@param To string | number Optional. UCID, PlayerID, or Name of recipient.
+---@param From string | number Optional. UCID, PlayerID, or Name of sender.
+---@return self
+function MESSAGE:ToChat(To, From, Message)
+    NET:SendChat(Message or self.Message, To or nil, From or To)
+
+    return self
+end
