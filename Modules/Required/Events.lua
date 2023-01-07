@@ -21,9 +21,7 @@ end
 --- Event handler and dispatcher.
 ---@param Event number The event ID
 function EVENTS:onEvent(Event)
-
     if ENUMS.EVENTS.ID[Event.id] then
-
         local EventData = {}
 
         if Event.initiator then
@@ -42,6 +40,7 @@ function EVENTS:onEvent(Event)
             if EventData.IniObjectCategory == Object.Category.UNIT then
                 EventData.IniDCSUnit = Event.initiator
                 EventData.IniDCSUnitName = EventData.IniDCSUnit:getName()
+                EventData.IniUnit = UNIT:FindByName(EventData.IniDCSUnitName)
                 EventData.IniDCSGroup = EventData.IniDCSUnit:getGroup()
 
                 if EventData.IniDCSGroup and EventData.IniDCSGroup:isExist() then
@@ -126,7 +125,15 @@ function EVENTS:onEvent(Event)
             if self._events[Event.id] then
                 for key, object in pairs(self._events[Event.id]) do
                     if object.callback then
-                        pcall(function() object.callback(key, EventData) end)
+                        pcall(function()
+                            if EventData.IniObjectCategory == Object.Category.UNIT and object ~= __DATABASE then
+                                if EventData.IniUnit == nil then
+                                    EventData.IniUnit = UNIT:FindByName(EventData.IniDCSUnitName)
+                                end
+                            end
+
+                            object.callback(key, EventData)
+                        end)
                     end
                 end
             end
