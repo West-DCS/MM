@@ -210,3 +210,5 @@ function NET:SendChat(Message, To, From)
 
     return self
 end
+
+NET = NET:_New()
