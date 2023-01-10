@@ -8,7 +8,8 @@
 ---@field public self BASE Self reference.
 BASE = {
     ClassName = 'BASE',
-    Schedules = {}
+    Schedules = {},
+    Listeners = {}
 }
 
 --- Initialize a new instance.
@@ -168,4 +169,32 @@ end
 ---@return number The current time.
 function BASE:Now()
     return timer.getTime()
+end
+
+function BASE:AddListener(Port, Callback)
+    self.Listeners[Port] = SERVER:New(Port)
+
+    self.Listeners[Port]:Start(self, Callback)
+
+    self:Info(string.format('Listener added on port %s.', Port))
+
+    return Port
+end
+
+function BASE:RemoveListener(Port)
+    self.Listeners[Port]:Stop()
+
+    self.Listeners[Port] = nil
+
+    return self
+end
+
+function BASE:RemoveAllListeners()
+    for _, Listener in pairs(self.Listeners) do
+        Listener:Stop()
+    end
+
+    self.Listeners = {}
+
+    return self
 end
