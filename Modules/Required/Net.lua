@@ -117,6 +117,28 @@ function NET:GetAllPlayersInfo()
     return PlayersInfo
 end
 
+function NET:GetAllPlayersInfoID()
+    local PlayerList = net.get_player_list()
+    local PlayersInfo = {}
+
+    for _, id in ipairs(PlayerList) do
+        local PlayerInfo = net.get_player_info(id, nil)
+
+        PlayersInfo[id] = {
+            PlayerID = id,
+            Name = PlayerInfo.name,
+            Coalition = PlayerInfo.side,
+            SlotID = PlayerInfo.slot,
+            Ping = PlayerInfo.ping,
+            ip = PlayerInfo.ipaddr,
+            ucid = PlayerInfo.ucid
+        }
+
+    end
+
+    return PlayersInfo
+end
+
 function NET:_GetAllPlayersInfoUCID()
     local PlayerList = net.get_player_list()
     local PlayersInfo = {}
