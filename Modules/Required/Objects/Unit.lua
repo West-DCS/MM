@@ -66,10 +66,18 @@ function UNIT:GetUCID()
     return self.ucid
 end
 
-function UNIT:Kick(message)
+function UNIT:Kick(Message)
     if not self.ucid then return end
 
-    NET:KickByUCID(self.ucid, message or nil)
+    NET:KickByUCID(self.ucid, Message or nil)
+
+    return self
+end
+
+function UNIT:KickToSpectators(Message)
+    if not self.ucid then return end
+
+    NET:KickToSpectatorsByUCID(self.ucid, Message)
 
     return self
 end
