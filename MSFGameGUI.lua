@@ -16,7 +16,7 @@
     dofile(_NMSF.RequiredDirectory .. 'Net.lua')
 
     -- Load User Modules (non-recursively, unordered)
-    for file in lfs.dir(_NMSF.UserDirectory) do
+    for file in lfs.dir(_NMSF.UserHooksDirectory) do
         if ROUTINES.file.isFile(_NMSF.UserHooksDirectory .. file) then
             NET:Log('Loading: %s', file)
             dofile(_NMSF.UserHooksDirectory .. file)
