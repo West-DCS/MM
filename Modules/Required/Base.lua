@@ -114,7 +114,7 @@ end
 ---@param msg string The message to log.
 ---@return BASE Returns self.
 function BASE:Info(msg, ...)
-    self:Log(msg, nil, ...)
+    self:Log(msg, 'info', ...)
 
     return self
 end
