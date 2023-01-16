@@ -82,8 +82,40 @@ function BASE:Resume()
     DCS.setPause(false)
 end
 
+function BASE:IsPause()
+    return DCS.getPause()
+end
+
+function BASE:IsMultiplayer()
+    return DCS.isMultiplayer()
+end
+
+function BASE:IsServer()
+    return DCS.isServer()
+end
+
+function BASE:GetMissionName()
+    return DCS.getMissionName()
+end
+
+function BASE:GetMissionTable()
+    return DCS.getCurrentMission()
+end
+
+function BASE:GetOptionsTable()
+    return DCS.getMissionOptions()
+end
+
+function BASE:GetFilename()
+    return DCS.getMissionFilename()
+end
+
+function BASE:LUA2JSON(Data)
+    return net.lua2json(Data)
+end
+
 function BASE:PipeUDP(Data, Port)
-    local Data = ROUTINES.util.oneLineSerialize(Data)
+    local Data = self:LUA2JSON(Data)
     local Socket = require 'socket'
     local udp = assert(Socket.udp())
 
