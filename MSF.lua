@@ -25,6 +25,8 @@ do
     _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
 
     if not soft then
+        package.path  = package.path .. ";.\\LuaSocket\\?.lua"
+
         function _MSF:Load(File, Explicit)
             local location = self.UserDirectory .. File
 
