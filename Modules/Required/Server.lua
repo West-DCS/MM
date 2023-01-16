@@ -15,21 +15,20 @@ function SERVER:New(Port)
     self.udp = assert(self.Socket.udp())
     self.udp:settimeout(0)
     self.udp:setsockname('*', self.Port)
+    self.Running = true
 
     return self
 end
 
 function SERVER:Start(Object, Callback)
-    self.Continue = true
-
     self.co = coroutine.create(function()
-        while self.Continue do
+        while self.Running do
             local Data = self.udp:receive()
 
             if Data then
-                Callback(Object, Data)
+                Data = NET:JSON2LUA(Data)
 
-                coroutine.yield()
+                Callback(Object, Data)
             else
                 coroutine.yield()
             end
@@ -38,10 +37,9 @@ function SERVER:Start(Object, Callback)
 
     coroutine.resume(self.co, self)
 
-    self:ScheduleRepeat(1/2000, coroutine.resume, self.co, self)
-
+    self:ScheduleRepeat(2/1000, coroutine.resume, self.co, self)
 end
 
 function SERVER:Stop()
-    self.Continue = false
+    self.Running = false
 end
