@@ -47,6 +47,12 @@ function NET:GetSlotIDFromPlayerID(id)
     return nil
 end
 
+function NET:ForceSlotByPlayerID(id, SideID, SlotID)
+    net.force_player_slot(id, SideID, SlotID)
+
+    return self
+end
+
 function NET:GetPingFromPlayerID(id)
     local ping = net.get_player_info(id, 'ping')
 
@@ -91,6 +97,28 @@ function NET:KickByUCID(ucid, Message)
     local PlayerID = self:GetPlayerIDFromUCID(ucid)
 
     self:KickByPlayerID(PlayerID, Message or nil)
+
+    return self
+end
+
+function NET:KickToSpectatorsByPlayerID(PlayerID, Message)
+    self:ForceSlotByPlayerID(PlayerID, 0, '')
+
+    if Message then
+        self:SendChat(Message)
+    end
+
+    self:Info('Kicked %s back to spectators.', PlayerID)
+
+    return self
+end
+
+function NET:KickToSpectatorsByUCID(ucid, Message)
+    local PlayerID = self:GetPlayerIDFromUCID(ucid)
+
+    if not PlayerID then return end
+
+    self:KickToSpectatorsByPlayerID(PlayerID, Message)
 
     return self
 end
@@ -163,6 +191,7 @@ end
 
 function NET:SendChat(Message, To, From)
     if not To then net.send_chat(Message) return end
+    if To and not From then From = To end
 
     local ToPlayerID = nil
     local FromPlayerID = nil
@@ -209,6 +238,10 @@ function NET:SendChat(Message, To, From)
     net.send_chat_to(Message, ToPlayerID, FromPlayerID)
 
     return self
+end
+
+function NET:JSON2LUA(JSON)
+    return net.json2lua(JSON)
 end
 
 NET = NET:_New()
