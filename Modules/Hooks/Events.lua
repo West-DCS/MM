@@ -35,6 +35,21 @@ function EVENTS:onPlayerTrySendChat(Object, Callback)
     self:SetCallbacks(table)
 end
 
+function EVENTS:onMissionLoadEnd(Object, Callback)
+    local table = {}
+
+    function table.onMissionLoadEnd()
+        local Event = {}
+
+        Event.MissionName = self:GetMissionName()
+        Event.IsPause = self:IsPause()
+
+        return Callback(Object, Event)
+    end
+
+    self:SetCallbacks(table)
+end
+
 function EVENTS:_AddEventData(Event)
     if not Event.PlayerID then return Event end
 
@@ -56,7 +71,8 @@ end
 
 function EVENTS:_AddEvent(EventType, Object, Callback)
     local EventTypes = {
-        Chat = self.onPlayerTrySendChat
+        Chat = self.onPlayerTrySendChat,
+        Load = self.onMissionLoadEnd
     }
 
     if not EventTypes[EventType] then return end
