@@ -9,6 +9,8 @@ ZONE = {
 function ZONE:New(zone)
     local self = BASE:Inherit(self, BASE:New())
 
+    if zone.verticies then self.Vertices = zone.verticies end
+
     self.Radius = zone.radius
     self.ZoneID = zone.zoneId
     self.Color = zone.color
@@ -40,10 +42,24 @@ function ZONE:GetRandomVec2(SurfaceType)
 
     local test = function()
         local NotValid = false
-        local radius = self.Radius * math.sqrt(math.random())
-        local theta = math.random() * 2 * math.pi
-        local x = self.x + radius * math.cos(theta)
-        local z = self.z + radius * math.sin(theta)
+        local x, z
+
+        -- Is a circle
+        if not self.Vertices then
+            local radius = self.Radius * math.sqrt(math.random())
+            local theta = math.random() * 2 * math.pi
+
+            x = self.x + radius * math.cos(theta)
+            z = self.z + radius * math.sin(theta)
+        -- Is a quadrilateral
+        else
+            local rx = math.random()
+            local ry = math.random()
+            self:Info('Making a random point')
+            x = (1 - rx) * ((1 - ry) * self.Vertices[1].x + ry * self.Vertices[4].x) + rx * ((1 - ry) * self.Vertices[2].x + ry * self.Vertices[3].x)
+            z = (1 - rx) * ((1 - ry) * self.Vertices[1].y + ry * self.Vertices[4].y) + rx * ((1 - ry) * self.Vertices[2].y + ry * self.Vertices[3].y)
+        end
+
 
         if land.getSurfaceType({x = x, y = z}) == SurfaceType then
 
