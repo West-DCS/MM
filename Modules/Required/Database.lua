@@ -112,6 +112,7 @@ function DATABASE:_OnBirth(Event)
             if Event.IniPlayerName then
                 local NetPlayerInfos = NET:GetAllPlayersInfo()
                 local ucid = NetPlayerInfos[Event.IniPlayerName].ucid
+
                 self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName, ucid)
             else
                 self:Add(self._Units, Event.IniDCSUnitName, UNIT, Event.IniDCSUnitName)
