@@ -36,6 +36,9 @@ end
 
 function SET:FilterName(RegEx)
     for Name, _ in pairs(self.Class) do
+        -- Escape '-' in-case name has unescaped '-'
+        local Name = string.gsub(Name, "-", "%%-")
+
         if not string.match(Name, RegEx) then
             self:RemoveByName(Name)
         end
