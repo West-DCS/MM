@@ -5,7 +5,7 @@
 ---@type OBJECT
 ---@class GROUP
 GROUP = {
-    ClassName = 'Group',
+    ClassName = 'GROUP',
 }
 
 function GROUP:New(Name)
@@ -32,6 +32,14 @@ function GROUP:GetDCSObject()
     end
 
     return nil
+end
+
+function GROUP:Activate()
+    local DCSGroup = self:GetDCSObject()
+
+    if not DCSGroup then return nil end
+
+    DCSGroup:activate()
 end
 
 function GROUP:Destroy()
@@ -68,6 +76,26 @@ function GROUP:GetUnits()
     end
 
     return nil
+end
+
+function GROUP:GetDCSUnits()
+    local DCSGroup = self:GetDCSObject()
+
+    if not DCSGroup then return nil end
+
+    local DCSUnits = DCSGroup:getUnits()
+
+    if not DCSUnits then return nil end
+
+    return DCSUnits
+end
+
+function GROUP:GetCountry()
+    local Units = self:GetUnits()
+
+    if not Units then return nil end
+
+    return Units[1]:GetCountry()
 end
 
 function GROUP:GetID()
