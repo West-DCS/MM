@@ -123,3 +123,23 @@ function BASE:PipeUDP(Data, Port)
     udp:setpeername('localhost', Port)
     udp:send(Data)
 end
+
+function BASE:PipeTCP(Data, Port)
+    local Data = self:LUA2JSON(Data)
+    local Socket = require 'socket'
+    local tcp = Socket.tcp()
+
+    tcp:settimeout(0.04)
+    tcp:connect('localhost', Port);
+    tcp:send(Data .. "\n");
+
+    while true do
+        local Message, Status = tcp:receive()
+
+        if Message then self:Log(Message) end
+
+        if Status == 'closed' then break end
+    end
+
+    tcp:close()
+end
