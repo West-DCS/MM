@@ -8,6 +8,7 @@ SPAWN = {
     ClassName = 'SPAWN',
     Offset = {x = 0, z = 10},
     UnitIterator = 1,
+    GroupIterator = 0
 }
 
 --- Create a new ground unit SPAWN class from a type name.
@@ -34,6 +35,32 @@ function SPAWN:NewGroundFromType(TypeUnit, Country, Name, Skill, Heading, CanDri
     self.Units = {}
 
     self:AddUnit()
+
+    return self
+end
+
+function SPAWN:NewTemplateFromGroup(Group)
+    if not Group:GetClassName() == 'GROUP' then return nil end
+
+    local self = BASE:Inherit(self, BASE:New())
+
+    self.Name = 'Group#' .. __DATABASE:_Iterate()
+    self.Static = false
+    self.Category = Group:GetCategory()
+    self.Country = Group:GetCountry()
+    self.Skill = 'Random'
+    self.CanDrive = true
+    self.Units = {}
+
+    local Units = Group:GetUnits()
+
+    for _, Unit in ipairs(Units) do
+        local Type = Unit:GetType()
+        local Heading = math.rad(Unit:GetHeading())
+        local Vec2 = Unit:GetVec3()
+
+        self:AddUnit(Type, nil, nil, Heading, nil, {x = Vec2.x, y = Vec2.z})
+    end
 
     return self
 end
@@ -67,7 +94,6 @@ function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, S
     local self = BASE:Inherit(self, BASE:New())
 
     self.Name = 'Static#' .. __DATABASE:_Iterate()
-
     self.Static = true
     self.Category = Category or 'Structures'
     self.TypeUnit = TypeUnit or 'Hangar B'
@@ -91,6 +117,40 @@ function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, S
     end
 
     return self
+end
+
+function SPAWN:InitCanDrive(Flag)
+    if not type(Flag) == 'boolean' then return end
+
+    self.CanDrive = Flag
+
+    return self
+end
+
+function SPAWN:InitSkill(Level)
+    local Levels = {
+        ['Random'] = 'Random',
+        ['Average'] = 'Average',
+        ['Good'] = 'Good',
+        ['High'] = 'High',
+        ['Excellent'] = 'Excellent'
+    }
+
+    if not Levels[Level] then return nil end
+
+    self.Skill = Levels[Level]
+
+    return self
+end
+
+function SPAWN:InitName(Name)
+    self.Name = Name
+
+    return self
+end
+
+function SPAWN:InitCountry()
+
 end
 
 --- Add units before spawning to the instantiated SPAWN class. Works only for non-static objects.
@@ -117,7 +177,7 @@ function SPAWN:AddUnit(TypeUnit, Name, Skill, Heading, CanDrive, Args)
     end
 
     table.insert(self.Units, unit)
-    self:_Iterate()
+    self:_IterateUnits()
 
     return self
 end
@@ -141,23 +201,36 @@ function SPAWN:SpawnFromVec2(Vec2)
         for i, unit in ipairs(self.Units) do
 
             if i == 1 then
-                if not unit.x and not unit.y then
-                    unit.x = self.Vec2.x
-                    unit.y = self.Vec2.z
+                if unit.x and unit.y then
+                    self:Info('I have x and y')
+
+                    self.Origin = {
+                        x = unit.x,
+                        y = unit.y
+                    }
                 end
+
+                unit.x = self.Vec2.x
+                unit.y = self.Vec2.z
             else
                 if not unit.x and not unit.y then
                     unit.x = self.Vec2.x + self.Offset.x
                     unit.y = self.Vec2.z + self.Offset.z
                     self.Offset.x = self.Offset.x + self.Offset.x
                     self.Offset.z = self.Offset.z + self.Offset.z
+                else
+                    unit.x = self.Vec2.x + (unit.x - self.Origin.x)
+                    unit.y = self.Vec2.z + (unit.y - self.Origin.y)
                 end
             end
         end
 
-        coalition.addGroup(self.Country, self.Category, self:_GetTemplate())
+        local template = self:_GetTemplate()
 
-        return GROUP:FindByName(self.Name)
+        coalition.addGroup(self.Country, self.Category, template)
+
+        self:L{self.GroupIterator}
+        return GROUP:FindByName(template.name)
     else
         if self.FARP then
             coalition.addGroup(self.Country, -1, self:_GetTemplate())
@@ -217,17 +290,17 @@ end
 function SPAWN:_GetTemplate()
     local template = {}
 
+    template.name = string.format('%s#%s', self.Name, self:_IterateGroups())
+
     if not self.Static then
         template.tasks = {}
         template.units = self.Units
-        template.name = self.Name
     else
         template.type = self.TypeUnit
         template.category = self.Category
         template.x = self.Vec2.x
         template.y = self.Vec2.z
         template.heading = self.Heading
-        template.name = self.Name
 
         if self.ShapeFile then
             template.shape_name = self.ShapeFile
@@ -245,7 +318,7 @@ function SPAWN:_GetTemplate()
             template.heliport_modulation = self.Mod
             group.units = {}
             group.units[1] = template
-            group.name = self.Name
+            group.name = string.format('%s#%s', self.Name, self:_IterateGroups())
 
             return group
         end
@@ -254,6 +327,12 @@ function SPAWN:_GetTemplate()
     return template
 end
 
-function SPAWN:_Iterate()
+function SPAWN:_IterateUnits()
     self.UnitIterator = self.UnitIterator + 1
+end
+
+function SPAWN:_IterateGroups()
+    self.GroupIterator = self.GroupIterator + 1
+
+    return self.GroupIterator
 end
