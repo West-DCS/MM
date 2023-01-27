@@ -55,7 +55,7 @@ function ZONE:GetRandomVec2(SurfaceType)
         else
             local rx = math.random()
             local ry = math.random()
-            self:Info('Making a random point')
+
             x = (1 - rx) * ((1 - ry) * self.Vertices[1].x + ry * self.Vertices[4].x) + rx * ((1 - ry) * self.Vertices[2].x + ry * self.Vertices[3].x)
             z = (1 - rx) * ((1 - ry) * self.Vertices[1].y + ry * self.Vertices[4].y) + rx * ((1 - ry) * self.Vertices[2].y + ry * self.Vertices[3].y)
         end
