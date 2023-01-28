@@ -87,6 +87,8 @@ MSF needs to know a couple of things. Inside your project directory, there is a 
 
 1. Copy the file into a new file called `Config.lua` in the same directory.
 2. Follow all the instructions within.
+3. If you want to, you can delete the `.gitignore` file to add your `Config.lua` back to tracking. Add whatever you want
+into your config. You can add new enumerators, secrets, etc.
 
 ## Add MSF Hooks (Optional)
 MSF has hooks to interact in the Net environment. MSF will also automatically initialize user hooks.
