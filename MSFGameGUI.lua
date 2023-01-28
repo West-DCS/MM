@@ -1,6 +1,7 @@
+do
+    local _NMSF = {}
 
-    _NMSF = {}
-    _NMSF.Directory = lfs.writedir() .. [[Scripts\MSF\]]
+    _NMSF.Directory = lfs.writedir() .. [[Scripts\$\]]
 
     _NMSF.ModulesDirectory = _NMSF.Directory .. [[Modules\]]
     _NMSF.RequiredDirectory = _NMSF.ModulesDirectory .. [[Required\]]
@@ -24,3 +25,4 @@
     end
 
     NET:Log('MSFGameGUI Initialized.')
+end
