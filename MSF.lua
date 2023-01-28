@@ -14,7 +14,7 @@ do
 
         _MSF.Directory = lfs.currentdir() .. [[\]]
     else
-        _MSF.Directory = lfs.writedir() .. [[Scripts\MSF\]]
+        _MSF.Directory = lfs.writedir() .. string.format([[Scripts\%s\]], CONFIG['ProjectName'])
     end
 
     _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
@@ -74,7 +74,7 @@ do
         end
 
         -- Log certifies that at least all modules loaded.
-        BASE:Info('%s initialization finished.', 'MSF')
+        BASE:Info('MSF initialization finished.')
     else
         function _MSF.Load(File)
             local f = loadfile(File)
@@ -124,13 +124,15 @@ do
 
             if Name == 'hooks' then
                 local Source = string.format('%sMSFGameGui.lua', _MSF.Directory)
-                local Destination = string.format('%s\\Scripts\\Hooks\\MSFGameGui.lua', CONFIG.SavedGames)
+                local Destination = string.format('%s\\Scripts\\Hooks\\%sGameGui.lua',
+                        CONFIG.SavedGames,
+                        CONFIG.ProjectName)
 
-                local status = ROUTINES.os.copy(Source, Destination)
+                local Contents = ROUTINES.file.read(Source, '')
+                local NewPath = string.format([[\%s\]], CONFIG.ProjectName)
+                local Sub = string.gsub(Contents, '\\$\\', NewPath)
 
-                if status == 1 then
-                    print('Error adding hooks.')
-                end
+                ROUTINES.file.write(Destination, '', Sub)
 
                 return
             end
