@@ -101,10 +101,13 @@ ROUTINES.util.size = function(table)
     return size
 end
 
----@param fileName string The file name to test.
+---@param FilePath string The file name to test.
 ---@return boolean Is file?
-ROUTINES.file.isFile = function(fileName)
-    if lfs.attributes(fileName, "mode") == "file" then
+ROUTINES.file.isFile = function(FilePath)
+    local NoPathName = string.match(FilePath, "[^\\]+$")
+    local Sub = string.sub(NoPathName, 1, 1)
+
+    if lfs.attributes(FilePath, "mode") == "file" and Sub ~= '.' then
         return true
     else
         return false 
@@ -156,6 +159,21 @@ end
 ROUTINES.file.EDSerializeToFile = function(FilePath, FileName, Table)
     local File = io.open(FilePath .. FileName, 'w')
     ROUTINES.file.EDSerialize(FileName, Table, nil, File)
+    File:close()
+end
+
+ROUTINES.file.read = function(FilePath, FileName)
+    local File = io.open(FilePath .. FileName, "r")
+    local Contents = File:read("*all")
+
+    File:close()
+
+    return Contents
+end
+
+ROUTINES.file.write = function(FilePath, FileName, Contents)
+    local File = io.open(FilePath .. FileName, "w")
+    File:write(Contents)
     File:close()
 end
 
