@@ -14,7 +14,7 @@ do
 
         _MSF.Directory = lfs.currentdir() .. [[\]]
     else
-        _MSF.Directory = lfs.writedir() .. string.format([[Scripts\%s\]], CONFIG['ProjectName'])
+        _MSF.Directory = lfs.writedir() .. string.format([[Scripts\%s\]], CONFIG.ProjectName)
     end
 
     _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
@@ -74,7 +74,7 @@ do
         end
 
         -- Log certifies that at least all modules loaded.
-        BASE:Info('MSF initialization finished.')
+        BASE:Info('%s initialization finished.', CONFIG.ProjectName)
     else
         function _MSF.Load(File)
             local f = loadfile(File)
@@ -130,9 +130,10 @@ do
 
                 local Contents = ROUTINES.file.read(Source, '')
                 local NewPath = string.format([[\%s\]], CONFIG.ProjectName)
-                local Sub = string.gsub(Contents, '\\$\\', NewPath)
+                local DirSub = string.gsub(Contents, '\\$\\', NewPath)
+                local NameSub = string.gsub(DirSub, '#', CONFIG.ProjectName)
 
-                ROUTINES.file.write(Destination, '', Sub)
+                ROUTINES.file.write(Destination, '', NameSub)
 
                 return
             end

@@ -24,5 +24,5 @@ do
         end
     end
 
-    NET:Log('MSFGameGUI Initialized.')
+    NET:Log('#GameGUI Initialized.')
 end
