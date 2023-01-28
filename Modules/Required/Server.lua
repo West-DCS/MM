@@ -49,7 +49,7 @@ function SERVER:Start(Object, Callback)
 
     coroutine.resume(self.co, self)
 
-    self:ScheduleRepeat(2/1000, coroutine.resume, self.co, self)
+    self.Scheduler = self:ScheduleRepeat(0.02, coroutine.resume, self.co, self)
 end
 
 function SERVER:StartTCP(Object, Callback)
@@ -99,5 +99,3 @@ function SERVER:Stop()
     self.Running = false
     self:ScheduleStop(self.Scheduler)
 end
-
-TCP = SERVER:NewTCP(101):StartTCP(TCP, function(Data) self:L(Data) end)
