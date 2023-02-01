@@ -115,7 +115,7 @@ function BASE:LUA2JSON(Data)
 end
 
 function BASE:PipeUDP(Data, Port)
-    local Data = self:LUA2JSON(Data)
+    --local Data = self:LUA2JSON(Data)
     local Socket = require 'socket'
     local udp = assert(Socket.udp())
 
