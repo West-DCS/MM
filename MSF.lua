@@ -283,6 +283,11 @@ do
             else
                 usage()
             end
+        elseif soft == 'freeze' then
+            local Freeze = require 'Freeze'
+            local Destination = arg[2]
+
+            ROUTINES.file.write(Destination, 'MSF.lua', Freeze.string)
         else
             print('Usage: MSF Soft Mode\n')
             print('\tadd\tAdd a module to MSF.\n')
