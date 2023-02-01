@@ -172,9 +172,9 @@ function BASE:Now()
 end
 
 function BASE:AddListener(Port, Callback)
-    self.Listeners[Port] = SERVER:New(Port)
+    self.Listeners[Port] = SERVER:UDP(Port)
 
-    self.Listeners[Port]:Start(self, Callback)
+    self.Listeners[Port]:Start()
 
     self:Info(string.format('Listener added on port %s.', Port))
 
