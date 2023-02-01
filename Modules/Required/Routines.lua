@@ -12,6 +12,7 @@ ROUTINES.util = {}
 ROUTINES.file = {}
 ROUTINES.os = {}
 ROUTINES.git = {}
+ROUTINES.string = {}
 
 ---@param object table The object or table to copy.
 ---@return table The new table with copied metatables.
@@ -214,4 +215,16 @@ end
 ROUTINES.git.clone = function(URL, destination)
     local argument = string.format('%s "%s"', URL, destination)
     return ROUTINES.os.exec('git clone -q', argument)
+end
+
+ROUTINES.string.split = function(String, Sep)
+    local Sep = Sep or '%s'
+
+    local t = {}
+
+    for String in string.gmatch(String, "([^"..Sep.."]+)") do
+        table.insert(t, String)
+    end
+
+    return t
 end
