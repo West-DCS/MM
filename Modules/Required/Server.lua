@@ -28,6 +28,7 @@ function SERVER:New(Port, InternetProtocol, ApplicationLayerProtocol)
     end
 
     self.Running = false
+    self.Layer = false
     self.Interval = 0.02
     self.Layer = false
     self.Callbacks = {}
