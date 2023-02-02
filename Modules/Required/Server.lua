@@ -174,7 +174,17 @@ function SERVER:_HandleHTTP()
                 self:_Respond(Client, self:_Response(self.Status['LengthRequired'])) break
             end
 
-            Body = Client:receive(tonumber(Headers['Content-Length']))
+            local ContentLength = tonumber(Headers['Content-Length'])
+
+            local Error
+
+            if ContentLength > 0 then
+                Body, Error = Client:receive(tonumber(Headers['Content-Length']))
+
+                if Error then
+                    self:_Timeout(Client, Error) break
+                end
+            end
 
             local Media, Type
 
