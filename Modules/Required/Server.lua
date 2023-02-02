@@ -30,7 +30,6 @@ function SERVER:New(Port, InternetProtocol, ApplicationLayerProtocol)
     self.Running = false
     self.Layer = false
     self.Interval = 0.02
-    self.Layer = false
     self.Callbacks = {}
 
     if InternetProtocol == 'udp' then
@@ -203,7 +202,6 @@ function SERVER:_HandleHTTP()
             local Response =
                 self:_Response(self.Status[Result], ResponseHeaders, ResponseBody, ResponseContentType, Method)
 
-            self:L{Response}
             local Sent, Error = self:_Respond(Client, Response)
 
             if not Sent then self:Error(Error) end
@@ -252,7 +250,6 @@ end
 
 function SERVER:_Response(Status, Headers, Body, ContentType, Method)
     local Body = Body or 'No Content'
-    local ContentType = ContentType or 'text/plain'
     local Method = Method or nil
     local Headers = Headers or {}
 
@@ -265,12 +262,6 @@ function SERVER:_Response(Status, Headers, Body, ContentType, Method)
     for Key, Value in pairs(Headers) do
         Response = string.format('%s%s: %s\r\n', Response, Key, Value)
     end
-
-    Response = string.format('%sContent-Type: %s\r\n', Response, ContentType)
-
-    local ContentLength = string.len(Body)
-
-    Response = string.format('%sContent-Length: %s\r\n\n', Response, ContentLength)
 
     if Method == 'HEAD' then return Response end
 
