@@ -284,9 +284,7 @@ function SERVER:_Respond(Client, Response)
 
     Client:close()
 
-    if Sent then return Sent end
-
-    return Error
+    return Sent, Error
 end
 
 function SERVER:Start()
