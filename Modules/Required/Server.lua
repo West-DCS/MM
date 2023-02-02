@@ -133,6 +133,8 @@ function SERVER:_HandleHTTP()
 
             if not Client then coroutine.yield(); break end
 
+            Client:settimeout(self.Interval)
+
             local RequestLine = Client:receive('*l')
 
             local Method, Route = string.match(RequestLine, '(%a*) (.*) ')
