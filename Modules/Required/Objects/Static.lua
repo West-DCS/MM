@@ -31,3 +31,12 @@ function STATIC:GetDCSObject()
 
     return nil
 end
+
+function STATIC:Destroy()
+    local Name = self:GetName()
+
+    self:CreateEventRemoveUnit(self:Now(), self:GetDCSObject())
+
+    SPAWN:NewStaticFromType(nil, nil, nil, 80, Name, true)
+            :SpawnFromVec2({x = 0, z = 0})
+end
