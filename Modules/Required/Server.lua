@@ -254,17 +254,16 @@ function SERVER:_Response(Status, Headers, Body, ContentType, Method)
     local Body = Body or 'No Content'
     local ContentType = ContentType or 'text/plain'
     local Method = Method or nil
+    local Headers = Headers or {}
+
+    Headers['Content-Length'] = string.len(Body)
+    Headers['Content-Type'] = ContentType or 'text/plain'
+    Headers['Server'] = 'MSF (West#9009)'
 
     local Response = string.format('HTTP/1.1 %s\r\n', Status)
 
-    if Headers then
-        if type(Headers) == 'table' then
-            for _, Header in ipairs(Headers) do
-                Response = string.format('%s%s\r\n', Response, Header)
-            end
-        else
-            Response = string.format('%s%s\r\n', Response, Headers)
-        end
+    for Key, Value in pairs(Headers) do
+        Response = string.format('%s%s: %s\r\n', Response, Key, Value)
     end
 
     Response = string.format('%sContent-Type: %s\r\n', Response, ContentType)
@@ -275,7 +274,7 @@ function SERVER:_Response(Status, Headers, Body, ContentType, Method)
 
     if Method == 'HEAD' then return Response end
 
-    Response = Response .. Body
+    Response = string.format('%s\r\n%s', Response, Body)
 
     return Response
 end
