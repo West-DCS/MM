@@ -242,8 +242,12 @@ function SERVER:POST(Route, Callback)
     return self
 end
 
-function SERVER:_Error()
-    return self:_Response(self.Status['InternalServerError'], nil, 'Error')
+function SERVER:_Error(Client, Message)
+    return self:_Respond(Client, self:_Response(self.Status['InternalServerError'], nil, Message))
+end
+
+function SERVER:_Timeout(Client, Message)
+    return self:_Respond(Client, self:_Response(self.Status['RequestTimeout'], nil, Message))
 end
 
 function SERVER:_Response(Status, Headers, Body, ContentType, Method)
