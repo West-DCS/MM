@@ -64,6 +64,7 @@ function SERVER:New(Port, InternetProtocol, ApplicationLayerProtocol)
                     ['BadRequest'] = '400 Bad Request',
                     ['Unauthorized'] = '401 Unauthorized',
                     ['NotFound'] = '404 Not Found',
+                    ['RequestTimeout'] = '408 Request Timeout',
                     ['LengthRequired'] = '411 Length Required',
                     ['Teapot'] = "418 I'm a teapot",
                     ['TooManyRequests'] = '429 Too Many Requests',
