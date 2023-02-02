@@ -90,13 +90,14 @@ end
 ---@param Freq number Optional The frequency of the FARP.
 ---@param Mod number Optional The modulation of the FARP.
 ---@return SPAWN Returns self.
-function SPAWN:NewStaticFromType(TypeUnit, Category, Country, Heading, Livery, ShapeFile, FARP, Callsign, Freq, Mod)
+function SPAWN:NewStaticFromType(TypeUnit, ShapeFile, Category, Country, Name, Dead, Heading, Livery, FARP, Callsign, Freq, Mod)
     local self = BASE:Inherit(self, BASE:New())
 
-    self.Name = 'Static#' .. __DATABASE:_Iterate()
+    self.Name = Name or 'Static#' .. __DATABASE:_Iterate()
+    self.Dead = Dead or false
     self.Static = true
-    self.Category = Category or 'Structures'
-    self.TypeUnit = TypeUnit or 'Hangar B'
+    self.Category = Category or nil
+    self.TypeUnit = TypeUnit or nil
     self.Country = Country or country.id.USA
     self.Heading = Heading or 0
 
@@ -296,11 +297,13 @@ function SPAWN:_GetTemplate()
         template.tasks = {}
         template.units = self.Units
     else
+        template.name = self.Name
         template.type = self.TypeUnit
         template.category = self.Category
         template.x = self.Vec2.x
         template.y = self.Vec2.z
         template.heading = self.Heading
+        template.dead = self.Dead
 
         if self.ShapeFile then
             template.shape_name = self.ShapeFile
