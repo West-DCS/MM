@@ -194,11 +194,14 @@ function SERVER:_HandleHTTP()
 
             local Callback = self.Callbacks[Method][Route]
 
-            local Status, ResponseHeaders, ResponseContentType, ResponseBody =
-                Callback(Headers, Media, Type, Body)
+            local Success, Result, ResponseHeaders, ResponseContentType, ResponseBody =
+
+            pcall(Callback, {Headers = Headers, Media = Media, Type = Type, Body = Body})
+
+            if not Success then self:_Error(Client, Result) break end
 
             local Response =
-                self:_Response(self.Status[Status], ResponseHeaders, ResponseBody, ResponseContentType, Method)
+                self:_Response(self.Status[Result], ResponseHeaders, ResponseBody, ResponseContentType, Method)
 
             self:L{Response}
             local Sent, Error = self:_Respond(Client, Response)
