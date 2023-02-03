@@ -135,9 +135,9 @@ MSF will add all scripts in these folders automatically into the correct place.
    Here is example code:
 
 ```lua
--- Create an object called TEST
+-- Create a table called TEST
 TEST = {
-   -- Define the ClassName (You need to include this.)
+   -- Define the ClassName (This is optional)
    ClassName = 'TEST'
 }
 
@@ -149,8 +149,8 @@ function TEST:New()
    -- Handle Birth Events (Very similar to MOOSE)
    self:HandleEvent(ENUMS.EVENTS.Birth, self.OnEventBirth)
 
-   -- Add a listener on port 100 with self.OnEventChat as callback function.
-   self:AddListener(100, self.OnEventChat)
+   -- Add a listener on port 16710 with self.OnEventChat as callback function.
+   self:AddListener(16710, self.OnEventChat)
 
    -- Return the new object.
    return self
@@ -179,7 +179,7 @@ end
 -- Callback function for Chat Events
 function TEST:OnEventChat(Message)
    -- Log the message.
-   self:Info(Message)
+   self:L(Message)
 end
 
 -- Create a new instance of your class.
@@ -229,6 +229,9 @@ end
 function TEST:Start()
    -- Now we should Handle Chat events, because the correct miz is loaded.
    self:HandleEvent('Chat', self.OnEventChat)
+
+   -- Unpause the sim.
+   if self:IsPause() then self:Resume() end
 end
 
 -- Callback function for mission start events. Executed only when the miz is done loading.
@@ -248,8 +251,8 @@ function TEST:OnEventChat(Event)
    -- The message from the player chat.
    local Message = Event.Message
 
-   -- Pipes the message string to a server on port 100.
-   self:PipeUDP(Message, 100)
+   -- Pipes the message string to a server on port 16710.
+   self:PipeUDP(Message, 16710)
 end
 
 -- Create a new instance of your class.
