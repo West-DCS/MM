@@ -244,4 +244,8 @@ function NET:JSON2LUA(JSON)
     return net.json2lua(JSON)
 end
 
+function NET:LUA2JSON(Lua)
+    return net.lua2json(Lua)
+end
+
 NET = NET:_New()
