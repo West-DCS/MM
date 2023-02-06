@@ -38,6 +38,8 @@ end
 ---@param Callback function The function to callback on.
 function BASE:HandleEvent(EventID, Callback)
     __EVENTS:_AddEvent(EventID, self, Callback)
+
+    return self
 end
 
 --- Log a message to DCS.log (NET)
