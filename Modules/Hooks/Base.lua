@@ -145,3 +145,11 @@ function BASE:PipeTCP(Data, Port)
 
     tcp:close()
 end
+
+function BASE:Pipe(Data, Object, Callback)
+    local Data = ROUTINES.util.oneLineSerialize(Data)
+
+    local String = string.format('local Data = %s; %s:%s(Data)', Data, Object, Callback)
+
+    return net.dostring_in('mission', string.format("a_do_script('%s')", String))
+end
