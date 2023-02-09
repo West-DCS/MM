@@ -26,7 +26,7 @@ do
     _MSF.CommandsDirectory = _MSF.ModulesDirectory .. [[Commands\]]
 
     if not Command then
-        package.path  = package.path .. ";.\\LuaSocket\\?.lua"
+        package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
 
         function _MSF:Load(File, Explicit)
             local location = self.UserDirectory .. File
@@ -61,8 +61,12 @@ do
 
         -- Load Optional Modules
         if REPOSITORIES then
-            for module, _ in pairs(REPOSITORIES) do
-                _MSF:Load(string.format([[%s\Module.lua]], module), 'Optional')
+            for Module, _ in pairs(REPOSITORIES) do
+                local Info = dofile(string.format([[%s%s\Info.lua]], _MSF.OptionalDirectory, Module))
+
+
+                BASE:L(Info)
+                --_MSF:Load(string.format([[%s\Module.lua]], Module), 'Optional')
             end
         end
 
