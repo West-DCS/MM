@@ -82,6 +82,33 @@ function Freeze:_Append(Table, Directory)
     Freeze.String = string.format('%s\n', Freeze.String)
 end
 
+function Freeze:_Remote()
+    return string.format([[
+    do
+        local ROUTINES = {}
+
+        ROUTINES.os.capture = function(cmd)
+            local f = assert(io.popen(cmd, 'r'))
+            local s = assert(f:read('*a'))
+            f:close()
+
+            return s
+        end
+
+        ROUTINES.git.raw = function(User, Repo, FilePath)
+            local Header = '"Accept:application/vnd.github.v3.raw"'
+            local Link = string.format('https://api.github.com/repos/%%s/%%s/contents/%%s', User, Repo, FilePath)
+
+            return ROUTINES.os.capture(string.format('curl -s -H %%s %%s', Header, Link))
+        end
+
+        local String = ROUTINES.git.raw(%s, %s, %s)
+
+        loadstring(String)
+    end
+    ]], 'nicelym', 'MSF', 'MSF.lua')
+end
+
 function Freeze:Execute(Args)
     if not Args[2] then self:Help() return end
 
@@ -97,7 +124,11 @@ function Freeze:Execute(Args)
     -- User Files
     self:_Append(self:_GetFiles(_MSF.UserDirectory), _MSF.UserDirectory)
 
-    ROUTINES.file.write(OutputPath, 'MSF.lua', Freeze.String)
+    ROUTINES.file.write(_MSF.BuildsDirectory, self.Name or 'MSF.lua', Freeze.String)
+
+    if self.Remote then
+        ROUTINES.file.write(_MSF.BuildsDirectory, (self.Name or 'MSF') .. (self.Remote and 'Remote.lua' or '.lua'), self:_Remote())
+    end
 end
 
 function Freeze:Help()
