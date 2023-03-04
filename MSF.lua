@@ -101,11 +101,16 @@ do
                 end
             end
         end
+
         dofile(_MSF.Directory .. 'Command.lua')
 
         if FoundCommand then
             FoundCommand = require(string.format('Modules\\Commands\\%s', arg[1]))
-            FoundCommand:Execute(arg)
+
+            -- Command could be boolean if -h, -help, or help was passed as argument.
+            if type(FoundCommand) == 'table' then
+                FoundCommand:Execute(arg)
+            end
         else
             FoundCommand = require 'Modules\\Commands\\Help'
             FoundCommand:Execute()
