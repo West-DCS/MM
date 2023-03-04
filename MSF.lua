@@ -24,7 +24,7 @@ do
     _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
     _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
     _MSF.CommandsDirectory = _MSF.ModulesDirectory .. [[Commands\]]
-    _MSF.BuildsDirectory = _MSF.ModulesDirectory .. [[Builds\]]
+    _MSF.BuildsDirectory = _MSF.Directory .. [[Builds\]]
 
     if not Command then
         package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
