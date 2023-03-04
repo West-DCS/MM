@@ -110,13 +110,6 @@ function Freeze:_Remote()
 end
 
 function Freeze:Execute(Args)
-    if not Args[2] then self:Help() return end
-
-    local OutputPath = Args[2]
-    if OutputPath == '-help' then self:Help() return end
-
-    self:Out(OutputPath)
-
     -- Required
     self:_Append(Freeze.Include, _MSF.Directory)
     -- Global Variables
@@ -129,10 +122,6 @@ function Freeze:Execute(Args)
     if self.Remote then
         ROUTINES.file.write(_MSF.BuildsDirectory, (self.Name or 'MSF') .. (self.Remote and 'Remote.lua' or '.lua'), self:_Remote())
     end
-end
-
-function Freeze:Help()
-    self:Out('Usage: freeze <OutputPath>')
 end
 
 return Freeze
