@@ -1,5 +1,23 @@
 -- Copy this into a new command to make a custom lua file with only the modules you want.
-local Freeze = COMMAND:New()
+
+local Options = {
+    -- Name option, set self.Name
+    n = {
+        fun = function(self, Param) self.Name = Param end,
+        desc = 'Optional File Name.',
+        param = 'Name'
+    },
+    -- Remote flag option, also compile a static file that downloads code from GitHub at mission runtime instead.
+    -- Useful for production code.
+    r = {
+       fun = function(self) self.Remote = true end,
+       desc = 'Remote Flag. Generate static file as well that downloads code from GitHub at mission runtime instead.'
+    }
+}
+
+local Freeze = COMMAND:New('freeze', 'Compile all code into one lua file.', Options)
+
+if not Freeze then return end
 
 -- Top of file package path.
 Freeze.String = 'package.path  = package.path .. ";.\\\\LuaSocket\\\\?.lua"\n'
