@@ -4,5 +4,7 @@ CONFIG = {
     -- Set the project name to the same name as your repository folder.
     ProjectName = 'MSF',
     -- This is the file where information about repositories is stored.
-    Repository = {User = 'nicelym', Repo = 'MSF_Repository', Path = 'REPOSITORIES'}
+    Repository = {User = 'nicelym', Repo = 'MSF_Repository', Path = 'REPOSITORIES'},
+    -- Remote repository for remote GitHub static Lua file.
+    Remote = {User = 'nicelym', Repo = 'MSF', Path = 'Config/.Config.lua'}
 }
