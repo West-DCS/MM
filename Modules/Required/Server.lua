@@ -128,6 +128,7 @@ end
 function SERVER:_HandleHTTP()
     local Handler = function ()
         while self.Running do
+            local Start = self.Socket.gettime()*1000
             local Client = self.Server:accept()
 
             if not Client then coroutine.yield(); break end
@@ -136,8 +137,16 @@ function SERVER:_HandleHTTP()
 
             local RequestLine = Client:receive('*l')
 
+            self:Info(RequestLine)
+
+            if not RequestLine then
+
+                self:_Error(Client, 'No Message Received') break
+            end
+
             local Method, Route = string.match(RequestLine, '(%a*) (.*) ')
 
+            self:L{Method}
             if not self.AllowedMethods[Method] then
                 self:_Respond(Client, self:_Response(self.Status['NotImplemented'])) break
             end
@@ -205,6 +214,11 @@ function SERVER:_HandleHTTP()
             local Sent, Error = self:_Respond(Client, Response)
 
             if not Sent then self:Error(Error) end
+
+            local End = self.Socket.gettime()*1000
+            local ExecutionTime = End - Start
+            self:L({Start, End})
+            self:Info('Blocked Time = %s milliseconds.', ExecutionTime)
         end
     end
 
@@ -256,6 +270,7 @@ function SERVER:_Response(Status, Headers, Body, ContentType, Method)
     Headers['Content-Length'] = string.len(Body)
     Headers['Content-Type'] = ContentType or 'text/plain'
     Headers['Server'] = 'MSF (West#9009)'
+    Headers['Cache-Control'] =  'no-cache, must-revalidate'
 
     local Response = string.format('HTTP/1.1 %s\r\n', Status)
 

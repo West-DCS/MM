@@ -38,6 +38,8 @@ end
 ---@param Callback function The function to callback on.
 function BASE:HandleEvent(EventID, Callback)
     __EVENTS:_AddEvent(EventID, self, Callback)
+
+    return self
 end
 
 --- Log a message to DCS.log (NET)
@@ -142,4 +144,12 @@ function BASE:PipeTCP(Data, Port)
     end
 
     tcp:close()
+end
+
+function BASE:Pipe(Data, Object, Callback)
+    local Data = ROUTINES.util.oneLineSerialize(Data)
+
+    local String = string.format('local Data = %s; %s:%s(Data)', Data, Object, Callback)
+
+    return net.dostring_in('mission', string.format("a_do_script('%s')", String))
 end

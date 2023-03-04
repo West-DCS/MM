@@ -5,12 +5,12 @@
 do
     _MSF = {}
 
-    local soft
+    local Command
 
     if arg then
         lfs = require 'lfs'
 
-        soft = arg[1]
+        Command = arg[1]
 
         _MSF.Directory = lfs.currentdir() .. [[\]]
     else
@@ -23,9 +23,11 @@ do
     _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Required\]]
     _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
     _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
+    _MSF.CommandsDirectory = _MSF.ModulesDirectory .. [[Commands\]]
+    _MSF.BuildsDirectory = _MSF.Directory .. [[Builds\]]
 
-    if not soft then
-        package.path  = package.path .. ";.\\LuaSocket\\?.lua"
+    if not Command then
+        package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
 
         function _MSF:Load(File, Explicit)
             local location = self.UserDirectory .. File
@@ -60,8 +62,12 @@ do
 
         -- Load Optional Modules
         if REPOSITORIES then
-            for module, _ in pairs(REPOSITORIES) do
-                _MSF:Load(string.format([[%s\Module.lua]], module), 'Optional')
+            for Module, _ in pairs(REPOSITORIES) do
+                local Info = dofile(string.format([[%s%s\Info.lua]], _MSF.OptionalDirectory, Module))
+
+
+                BASE:L(Info)
+                --_MSF:Load(string.format([[%s\Module.lua]], Module), 'Optional')
             end
         end
 
@@ -76,225 +82,38 @@ do
         -- Log certifies that at least all modules loaded.
         BASE:Info('%s initialization finished.', CONFIG.ProjectName)
     else
-        function _MSF.Load(File)
-            local f = loadfile(File)
+        dofile(_MSF.ConfigDirectory .. 'Config.lua')
+        dofile(_MSF.RequiredDirectory .. 'Routines.lua')
+        dofile(_MSF.ConfigDirectory .. 'REPOSITORIES')
 
-            if f then
-                return f()
+        loadstring(ROUTINES.git.raw(CONFIG.Repository.User, CONFIG.Repository.Repo, CONFIG.Repository.Path))()
+
+        local FoundCommand = false
+
+        for File in lfs.dir(_MSF.CommandsDirectory) do
+            if ROUTINES.file.isFile(_MSF.CommandsDirectory .. File) then
+                local Name = string.match(File, '(.*)%.')
+
+                if string.lower(arg[1]) == string.lower(Name) then
+                    FoundCommand = true
+
+                    break
+                end
             end
         end
 
-        function _MSF.FetchRepositories()
-            local header = '"Accept:application/vnd.github.v3.raw"'
-            local link = 'https://api.github.com/repos/nicelym/MSF_Repositories/contents/REPOSITORIES'
-            local argument = string.format("%s %s", header, link)
+        dofile(_MSF.Directory .. 'Command.lua')
 
-            return ROUTINES.os.capture(string.format('curl -s -H %s', argument))
-        end
+        if FoundCommand then
+            FoundCommand = require(string.format('Modules\\Commands\\%s', arg[1]))
 
-        --Load Config file
-        _MSF.Load(_MSF.ConfigDirectory .. 'Config.lua')
-
-        -- Load Routines for external use.
-        _MSF.Load(_MSF.RequiredDirectory .. 'Routines.lua')
-        _MSF.Load(_MSF.ConfigDirectory .. 'REPOSITORIES')
-
-        local f = assert(loadstring(_MSF.FetchRepositories()))
-
-        if f then
-            f()
-        end
-
-        if soft == 'add' then
-            local usage = function()
-                print('Usage: add <Module> <URL>\tAdd a module. URL only required for non-listed modules.')
+            -- Command could be boolean if -h, -help, or help was passed as argument.
+            if type(FoundCommand) == 'table' then
+                FoundCommand:Execute(arg)
             end
-
-            if not arg[2] then usage() return end
-            if not _REPOSITORIES then print('Could not fetch module from GitHub.') return end
-            if not REPOSITORIES then REPOSITORIES = {} end
-
-            local Name = arg[2]
-
-            if Name == '-help' then
-                usage()
-
-                return
-            end
-
-            if Name == 'hooks' then
-                local Source = string.format('%sMSFGameGui.lua', _MSF.Directory)
-                local Destination = string.format('%s\\Scripts\\Hooks\\%sGameGui.lua',
-                        CONFIG.SavedGames,
-                        CONFIG.ProjectName)
-
-                local Contents = ROUTINES.file.read(Source, '')
-                local NewPath = string.format([[\%s\]], CONFIG.ProjectName)
-                local DirSub = string.gsub(Contents, '\\$\\', NewPath)
-                local NameSub = string.gsub(DirSub, '#', CONFIG.ProjectName)
-
-                ROUTINES.file.write(Destination, '', NameSub)
-
-                return
-            end
-
-            local Repository
-            local Destination
-            local URL
-
-            if REPOSITORIES[Name] then
-                print(string.format('%s already exists. Run update -i %s instead.', Name, Name))
-                return
-            end
-
-            Repository = _REPOSITORIES[Name]
-
-            if Repository then
-                Destination = _MSF.OptionalDirectory .. Name
-                URL = Repository
-            else
-                if not arg[3] then
-                    print(string.format('%s is not indexed, you must provide a URL as a third argument.',
-                            Name))
-                    return
-                end
-
-                URL = arg[3]
-                Destination = _MSF.OptionalDirectory .. Name
-            end
-
-            local status = ROUTINES.git.clone(URL, Destination)
-
-            if status == 0 then
-                REPOSITORIES[Name] = URL
-
-                ROUTINES.file.EDSerializeToFile(_MSF.ConfigDirectory, 'REPOSITORIES', REPOSITORIES)
-                print(string.format('%s was added.', Name))
-            else
-                print(string.format('An error occurred when trying to download the module. Code %s',
-                        status))
-            end
-        elseif soft == 'update' then
-            local usage = function()
-                print('Usage: update')
-                print('\t[-i] <module>\tUpdate a specific module.')
-                print('\t[-a]\t\tUpdate all modules.')
-            end
-
-            if not arg[2] then usage() return end
-
-            local flag = arg[2]
-
-            if REPOSITORIES then
-                -- Update all repositories.
-                if flag == '-a' then
-                    for repo, _ in pairs(REPOSITORIES) do
-                        local path = _MSF.OptionalDirectory .. repo
-
-                        ROUTINES.git.update(path)
-                    end
-                    -- Update an individual repository.
-                elseif flag == '-i' then
-                    local repo = arg[3]
-
-                    if REPOSITORIES[repo] then
-                        local path = _MSF.OptionalDirectory .. repo
-
-                        ROUTINES.git.update(path)
-                    else
-                        print('Module not indexed, cannot update.')
-                    end
-                else
-                    usage()
-                end
-            else
-                print('Nothing to update. Add a module with "add <Name>"')
-            end
-        elseif soft == 'remove' then
-            local usage = function()
-                print('Usage: remove <Module>\tRemove a module.')
-            end
-
-            if not arg[2] then usage() return end
-
-            local Name = arg[2]
-
-            if Name == '-help' then
-                usage()
-
-                return
-            end
-
-            if REPOSITORIES then
-                if REPOSITORIES[Name] then
-                    REPOSITORIES[Name] = nil
-
-                    ROUTINES.file.EDSerializeToFile(_MSF.ConfigDirectory, 'REPOSITORIES', REPOSITORIES)
-
-                    local dir = string.format('%s%s', _MSF.OptionalDirectory, Name)
-
-                    ROUTINES.os.rmdir(dir)
-
-                    print(string.format('%s was removed.', Name))
-                else
-                    print('Module does not exist.')
-                end
-            else
-                print('Nothing to remove.')
-            end
-        elseif soft == 'list' then
-            local usage = function()
-                print('Usage: list')
-                print('\t[-i]\tList installed modules.')
-                print('\t[-a]\tList available modules.')
-            end
-
-            local list = function(table)
-                local size = ROUTINES.util.size(table)
-                local i = 1
-
-                for k, _ in pairs(table) do
-                    io.write(k)
-
-                    if i ~= size then
-                        io.write(', ')
-                    end
-
-                    i = i + 1
-                end
-            end
-
-            if not arg[2] then usage() return end
-
-            local flag = arg[2]
-
-            if flag == '-i' then
-                if REPOSITORIES then
-                    list(REPOSITORIES)
-                else
-                    print('No modules installed.')
-                end
-            elseif flag == '-a' then
-                if _REPOSITORIES then
-                    list(_REPOSITORIES)
-                else
-                    print('Could not fetch module from GitHub.')
-                end
-            else
-                usage()
-            end
-        elseif soft == 'freeze' then
-            local Freeze = require 'Freeze'
-            local Destination = arg[2]
-
-            ROUTINES.file.write(Destination, 'MSF.lua', Freeze.string)
         else
-            print('Usage: MSF Soft Mode\n')
-            print('\tadd\tAdd a module to MSF.\n')
-            print('\tupdate\tUpdate a modules(s) in MSF.\n')
-            print('\tremove\tRemove a module in MSF.\n')
-            print('\tlist\tList installed and available modules in MSF.\n')
-            print('Run "add -help" etc. for more instructions.')
+            FoundCommand = require 'Modules\\Commands\\Help'
+            FoundCommand:Execute()
         end
     end
 end

@@ -217,6 +217,13 @@ ROUTINES.git.clone = function(URL, destination)
     return ROUTINES.os.exec('git clone -q', argument)
 end
 
+ROUTINES.git.raw = function(User, Repo, FilePath)
+    local Header = '"Accept:application/vnd.github.v3.raw"'
+    local Link = string.format('https://api.github.com/repos/%s/%s/contents/%s', User, Repo, FilePath)
+
+    return ROUTINES.os.capture(string.format('curl -s -H %s %s', Header, Link))
+end
+
 ROUTINES.string.split = function(String, Sep)
     local Sep = Sep or '%s'
 

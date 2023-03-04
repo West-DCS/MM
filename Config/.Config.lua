@@ -1,8 +1,10 @@
--- Example Config File
--- You can delete the .gitignore file if you want to track your Config File!
 CONFIG = {
     -- Set the directory of your DCS Saved Games folder. You must include \\ at the end to escape the \
     SavedGames = 'C:\\Users\\nicel\\Saved Games\\DCS.openbeta\\',
     -- Set the project name to the same name as your repository folder.
-    ProjectName = 'MSF'
+    ProjectName = 'MSF',
+    -- This is the file where information about repositories is stored.
+    Repository = {User = 'nicelym', Repo = 'MSF_Repository', Path = 'REPOSITORIES'},
+    -- Remote repository for remote GitHub static Lua file.
+    Remote = {User = 'nicelym', Repo = 'MSF', Path = 'Config/.Config.lua'}
 }

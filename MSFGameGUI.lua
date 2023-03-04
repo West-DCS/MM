@@ -1,15 +1,15 @@
-do
-    local _NMSF = {}
+_NMSF = {}
 
-    _NMSF.Directory = lfs.writedir() .. [[Scripts\$\]]
+_NMSF.Directory = lfs.writedir() .. [[Scripts\$\]]
 
-    _NMSF.ModulesDirectory = _NMSF.Directory .. [[Modules\]]
-    _NMSF.RequiredDirectory = _NMSF.ModulesDirectory .. [[Required\]]
-    _NMSF.UserDirectory = _NMSF.ModulesDirectory .. [[User\]]
-    _NMSF.UserHooksDirectory = _NMSF.UserDirectory .. [[Hooks\]]
-    _NMSF.ConfigDirectory = _NMSF.Directory .. [[Config\]]
-    _NMSF.HooksDirectory = _NMSF.ModulesDirectory .. [[Hooks\]]
+_NMSF.ModulesDirectory = _NMSF.Directory .. [[Modules\]]
+_NMSF.RequiredDirectory = _NMSF.ModulesDirectory .. [[Required\]]
+_NMSF.UserDirectory = _NMSF.ModulesDirectory .. [[User\]]
+_NMSF.UserHooksDirectory = _NMSF.UserDirectory .. [[Hooks\]]
+_NMSF.ConfigDirectory = _NMSF.Directory .. [[Config\]]
+_NMSF.HooksDirectory = _NMSF.ModulesDirectory .. [[Hooks\]]
 
+_NMSF.load = function()
     dofile(_NMSF.ConfigDirectory .. 'Config.lua')
     dofile(_NMSF.RequiredDirectory .. 'Routines.lua')
     dofile(_NMSF.HooksDirectory .. 'Base.lua')
@@ -23,6 +23,12 @@ do
             dofile(_NMSF.UserHooksDirectory .. file)
         end
     end
-
-    NET:Log('#GameGUI Initialized.')
 end
+
+-- Initial Load
+_NMSF.load()
+
+-- Everytime a mission loads, reload all hooks.
+__LOADER = BASE:New():HandleEvent('Load', _NMSF.load)
+
+NET:Log('#GameGUI Initialized.')
