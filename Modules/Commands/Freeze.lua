@@ -102,11 +102,11 @@ function Freeze:_Remote()
             return ROUTINES.os.capture(string.format('curl -s -H %%s %%s', Header, Link))
         end
 
-        local String = ROUTINES.git.raw(%s, %s, %s)
+        local String = ROUTINES.git.raw('%s', '%s', '%s')
 
         loadstring(String)
     end
-    ]], 'nicelym', 'MSF', 'MSF.lua')
+    ]], CONFIG.Remote.User, CONFIG.Remote.Repo, CONFIG.Remote.Path)
 end
 
 function Freeze:Execute(Args)
