@@ -235,3 +235,9 @@ ROUTINES.string.split = function(String, Sep)
 
     return t
 end
+
+ROUTINES.string.firstChar = function(String)
+    if not type(String) == 'string' then return false end
+
+    return string.sub(String, 1, 1)
+end
