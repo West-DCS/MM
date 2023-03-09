@@ -12,12 +12,21 @@ local Options = {
     r = {
        fun = function(self) self.Remote = true end,
        desc = 'Remote Flag. Generate static file as well that downloads code from GitHub at mission runtime instead.'
+    },
+    -- Append a version number. You can set a custom version or it will pull from config file.
+    v = {
+        fun = function(self, Param) self.Version = Param or CONFIG.Version or '' end,
+        desc = 'Append a version number or string.',
+        param = 'Version'
     }
 }
 
+-- Instantiate a new COMMAND object.
 local Freeze = COMMAND:New('freeze', 'Compile all code into one lua file.', Options)
 
 if not Freeze then return end
+if not Freeze.Version then Freeze.Version = '' end
+if not Freeze.Name then Freeze.Name = 'MSF' end
 
 -- Top of file package path.
 Freeze.String = 'package.path  = package.path .. ";.\\\\LuaSocket\\\\?.lua"\n'
@@ -84,32 +93,14 @@ end
 
 function Freeze:_Remote()
     return string.format([[
-    do
-        local ROUTINES = {}
-
-        ROUTINES.os.capture = function(cmd)
-            local f = assert(io.popen(cmd, 'r'))
-            local s = assert(f:read('*a'))
-            f:close()
-
-            return s
-        end
-
-        ROUTINES.git.raw = function(User, Repo, FilePath)
-            local Header = '"Accept:application/vnd.github.v3.raw"'
-            local Link = string.format('https://api.github.com/repos/%%s/%%s/contents/%%s', User, Repo, FilePath)
-
-            return ROUTINES.os.capture(string.format('curl -s -H %%s %%s', Header, Link))
-        end
-
-        local String = ROUTINES.git.raw('%s', '%s', '%s')
-
-        loadstring(String)
-    end
+    os.execute("curl -s -H " .. '"Accept:application/vnd.github.v3.raw" ' ..
+        "https://api.github.com/repos/%s/%s/contents/%s > temp.lua")
+    dofile('temp.lua')
+    os.remove('temp.lua')
     ]], CONFIG.Remote.User, CONFIG.Remote.Repo, CONFIG.Remote.Path)
 end
 
-function Freeze:Execute(Args)
+function Freeze:Execute()
     -- Required
     self:_Append(Freeze.Include, _MSF.Directory)
     -- Global Variables
@@ -117,10 +108,12 @@ function Freeze:Execute(Args)
     -- User Files
     self:_Append(self:_GetFiles(_MSF.UserDirectory), _MSF.UserDirectory)
 
-    ROUTINES.file.write(_MSF.BuildsDirectory, self.Name or 'MSF.lua', Freeze.String)
+    local Name = string.format('%s%s', self.Name, self.Version)
+
+    ROUTINES.file.write(_MSF.BuildsDirectory, Name .. '.lua', Freeze.String)
 
     if self.Remote then
-        ROUTINES.file.write(_MSF.BuildsDirectory, (self.Name or 'MSF') .. (self.Remote and 'Remote.lua' or '.lua'), self:_Remote())
+        ROUTINES.file.write(_MSF.BuildsDirectory, Name .. 'Remote.lua', self:_Remote())
     end
 end
 
