@@ -31,6 +31,24 @@ function COMMAND:Help()
     end
 end
 
+function COMMAND:_ParseArg(ArgIndex, Option)
+    -- The command has options, possibly with a parameter.
+    if ROUTINES.string.firstChar(Option) == '-'then
+        -- Check if there is a parameter with the option. Pass parameter to function.
+        if ArgIndex + 1 <= #arg and ROUTINES.string.firstChar(arg[ArgIndex + 1]) ~= '-' then
+            local Param = arg[ArgIndex + 1]
+
+            self.Options[string.sub(Option, 2, 2)].fun(self, Param)
+            -- No parameter, execution function without param.
+        else
+            self.Options[string.sub(Option, 2, 2)].fun(self)
+        end
+    -- The command does not have options, just parameters. Index the options table by numerical index instead.
+    --else
+    --    self.Options[i - 1]()
+    end
+end
+
 function COMMAND:_Switch()
     if not arg then return end
     if not self.Options then return end
@@ -38,33 +56,19 @@ function COMMAND:_Switch()
     for i, Option in ipairs(arg) do
         -- First Arg is command to run, this is already known. Each arg after first, is the options, followed by
         -- optional parameters.
-        if i > 1 then
-            -- Test here if the option is -h or -help to break out of loop and output usage function.
-            if i == 2 then
-                local String = string.lower(arg[2])
 
-                if String == '-h' or String == '-help' or String == 'help' then
-                    self:Help()
+        -- Test here if the option is -h or -help to break out of loop and output usage function.
+        if i == 2 then
+            local String = string.lower(arg[2])
 
-                    return false
-                end
-            end
-            -- The command has options, possibly with a parameter.
-            if string.sub(Option, 1, 1) == '-'then
-                -- Check if there is a parameter with the option. Pass parameter to function.
-                if i + 1 <= #arg then
-                    local Param = arg[i + 1]
+            if String == '-h' or String == '-help' or String == 'help' then
+                self:Help()
 
-                    self.Options[string.sub(Option, 2, 2)].fun(self, Param)
-                -- No parameter, execution function without param.
-                else
-                    self.Options[string.sub(Option, 2, 2)].fun(self)
-                end
-            -- The command does not have options, just parameters. Index the options table by numerical index instead.
-            --else
-            --    self.Options[i - 1]()
+                return false
             end
         end
+
+        self:_ParseArg(i, Option)
     end
 
     return true
