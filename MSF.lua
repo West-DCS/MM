@@ -182,8 +182,6 @@ function _MSF:TryLoadStringOrFile(StringOrFile, Silent, ErrorMessage, ThrowError
 
     -- If the error should be logged to DCS.log in the case of running DCS, or output to command-line.
     if not Silent then
-
-
         -- DCS env global variable, error level. Logs the ErrorMessage or by default the error from loadfile.
         if env then
             env.error(ErrorMessage or Error)
@@ -196,8 +194,6 @@ function _MSF:TryLoadStringOrFile(StringOrFile, Silent, ErrorMessage, ThrowError
             -- Set text to default color.
             io.write('\27[0m')
         end
-
-
     end
 
     -- If we get to here, there was some error in file or string.
