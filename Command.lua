@@ -50,8 +50,8 @@ function COMMAND:_ParseArg(ArgIndex, Option)
 end
 
 function COMMAND:_Switch()
-    if not arg then return end
-    if not self.Options then return end
+    if not arg then return true end
+    if not self.Options then return true end
 
     for i, Option in ipairs(arg) do
         -- First Arg is command to run, this is already known. Each arg after first, is the options, followed by
