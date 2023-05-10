@@ -1,6 +1,7 @@
 -- Required Modules, do not touch. Order is important.
 --TODO Fix REPOSITORIES missing
 --_MSF:Load('REPOSITORIES', 'Config')
+_MSF:AddGlobalFromFile('BASE', _MSF.RequiredDirectory .. 'Base.lua')
 _MSF:AddGlobalFromFile('ENUMS', _MSF.RequiredDirectory .. 'Enums.lua')
 _MSF:AddGlobalFromFile('ROUTINES', _MSF.RequiredDirectory .. 'Routines.lua')
 _MSF:AddGlobalFromFile('EVENTS', _MSF.RequiredDirectory .. 'Events.lua')
