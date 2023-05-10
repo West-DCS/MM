@@ -64,6 +64,9 @@ function _MSF:Init()
 
         if NoCommand then return end
 
+        -- If user just want's info on a command, do no execute.
+        if arg[2] == string.lower('help') then Command:Help() return end
+
         Command:Execute()
     else
         print(string.format("MSF: '%s' is not a valid MSF command. See 'MSF help'.\n", arg[1]))
