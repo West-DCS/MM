@@ -116,8 +116,8 @@ function _MSF:SetDirectories()
 
     _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
     _MSF.UserDirectory = _MSF.ModulesDirectory .. [[User\]]
-    _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Optional\]]
-    _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Required\]]
+    _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Community\]]
+    _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Core\]]
     _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
     _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
     _MSF.CommandsDirectory = _MSF.ModulesDirectory .. [[Commands\]]
