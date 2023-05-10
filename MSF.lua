@@ -79,7 +79,7 @@ function _MSF:InitDCS()
     _MSF:SetDirectories()
 
     -- Add LuaSocket which is not included by DCS package.path by default.
-    package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
+    --package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
 
 
     _MSF:TryLoadStringOrFile({_MSF.Directory .. 'Modules.lua'}, false,
