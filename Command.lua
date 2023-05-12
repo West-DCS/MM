@@ -36,6 +36,8 @@ end
 function COMMAND:_ParseArg(ArgIndex, Option)
     -- The command has options, possibly with a parameter.
     if ROUTINES.string.firstChar(Option) == '-'then
+        -- Test if valid option passed.
+        if not self.Options[string.sub(Option, 2, 2)] then self:Help() return end
         -- Check if there is a parameter with the option. Pass parameter to function.
         if ArgIndex + 1 <= #arg and ROUTINES.string.firstChar(arg[ArgIndex + 1]) ~= '-' then
             local Param = arg[ArgIndex + 1]
