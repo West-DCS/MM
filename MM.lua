@@ -4,56 +4,55 @@
 
 -- Global MSF variable storing core framework functions. Use routines instead of these unless you know what you are
 -- doing.
-_MSF = {}
+_MM = {}
 
 -- Initialization from Command-Line
-function _MSF:Init()
-    -- LFS for file i/o. DCS already has LFS installed. Required for _MSF:SetDirectories().
+function _MM:Init()
+    -- LFS for file i/o. DCS already has LFS installed. Required for _MM:SetDirectories().
     lfs = require 'lfs'
 
-    _MSF:SetDirectories()
+    _MM:SetDirectories()
 
     -- Error booleans if missing Config.lua, Routines file, or Command file.
     local NoConfig, NoRoutines, NoCommands
 
     -- User Config File
-    _, NoConfig = _MSF:TryLoadStringOrFile({ _MSF.ConfigDirectory .. 'Config.lua' }, false,
+    _, NoConfig = _MM:TryLoadStringOrFile({ _MM.ConfigDirectory .. 'Config.lua' }, false,
             'Missing Config.lua file.\nHint: Rename .Config.lua to Config.lua\n')
-    -- User Secrets
-    _MSF:TryLoadStringOrFile({ _MSF.ConfigDirectory .. '.env' })
-    -- Routines file holding common-use functions.
-    _, NoRoutines = _MSF:TryLoadStringOrFile({ _MSF.RequiredDirectory .. 'Routines.lua' }, false,
-            'Missing Routines File.\n', true)
-    -- User Installed repositories. Needed to know for some command-line functions. This is okay to be missing.
-    -- User might not have installed anything.
-    _, NoCommands = _MSF:TryLoadStringOrFile({ _MSF.Directory .. 'Command.lua' }, false,
-            'Missing Command File.\n', true)
-    _MSF:TryLoadStringOrFile({ _MSF.ConfigDirectory .. 'REPOSITORIES' }, true)
 
-    if NoConfig or NoRoutines or NoCommands then return end
+    if NoConfig then return end
+
+    -- User Secrets
+    _MM:TryLoadStringOrFile({ _MM.ConfigDirectory .. '.env' })
+
+    -- User Installed repositories. Needed to know for some command-line functions. This is okay to be missing.
+    _MM:TryLoadStringOrFile({ _MM.ConfigDirectory .. 'REPOSITORIES' }, true)
+
+    -- Load MM Core Modules
+    _MM:InitModules(_MM.CoreDirectory)
 
     -- Error boolean for Repository of MSF modules on GitHub
     local NoRemote
 
-    _, NoRemote = _MSF:TryLoadStringOrFile(ROUTINES.git.raw(
+    _, NoRemote = _MM:TryLoadStringOrFile(ROUTINES.git.raw(
             CONFIG.Repository.User, CONFIG.Repository.Repo, CONFIG.Repository.Path),
             false,
             'An Error Occurred Fetching the Repository From GitHub.\n' ..
             'Hint: You have reached the default max amount of requests to GitHub API (60); or,\n' ..
             'you have incorrectly configured the repository in you Config.lua.\n\n' ..
-            'You can increase your API limit by adding SECRETS.GitHubPAT to an .env file.')
+            'You can increase your API limit by adding your PAT as GITHUBPAT to an .env file.')
 
     if NoRemote then return end
 
     -- Generate a list of available commands inside of the Commands Directory.
-    local Commands = ROUTINES.file.GetFilesInDir(_MSF.CommandsDirectory)
+    local Commands = ROUTINES.file.GetFilesInDir(_MM.CommandsDirectory)
 
     -- Command to search and a boolean if an error occurs initializing a command.
     local Command, NoCommand
 
     -- Test if no arguments provided to MSF, if so, then automatically execute a usage.
     if not arg[1] then
-        Command, NoCommand = _MSF:TryLoadStringOrFile({_MSF.CommandsDirectory .. 'Help.lua'}, false,
+        Command, NoCommand = _MM:TryLoadStringOrFile({_MM.CommandsDirectory .. 'Help.lua'}, false,
                 'Error in Command.\n', true)
 
         if NoCommand then return end
@@ -61,7 +60,7 @@ function _MSF:Init()
         Command:Execute()
     -- Test if the argument provided is a valid command located in commands directory.
     elseif Commands[ROUTINES.string.UpperFirstChar(arg[1]) .. '.lua'] then
-        Command, NoCommand= _MSF:TryLoadStringOrFile(
+        Command, NoCommand= _MM:TryLoadStringOrFile(
                 { Commands[ROUTINES.string.UpperFirstChar(arg[1]) .. '.lua'] }, false,
                 'Error in Command.\n', true)
 
@@ -78,56 +77,35 @@ function _MSF:Init()
     return
 end
 
-function _MSF:InitDCS()
-    _MSF:SetDirectories()
+function _MM:InitDCS()
+    _MM:SetDirectories()
 
-    -- Add LuaSocket which is not included by DCS package.path by default.
-    --package.path  = package.path .. ';.\\LuaSocket\\?.lua' .. string.format(';%s?.lua', _MSF.Directory)
+    -- Load Community modules.
+    _MM:InitModuleDir(_MM.CommunityDirectory)
 
-
-    _MSF:TryLoadStringOrFile({_MSF.Directory .. 'Modules.lua'}, false,
-            'Missing Modules File.', true)
-
-    --TODO Finish optional and user modules.
-    ---- Load Optional Modules
-    --if REPOSITORIES then
-    --    for Module, _ in pairs(REPOSITORIES) do
-    --        local Info = dofile(string.format([[%s%s\Info.lua]], _MSF.OptionalDirectory, Module))
-    --
-    --
-    --        BASE:L(Info)
-    --        --_MSF:Load(string.format([[%s\Module.lua]], Module), 'Optional')
-    --    end
-    --end
-
-    ---- Load User Modules (non-recursively, unordered)
-    --for file in lfs.dir(_MSF.UserDirectory) do
-    --    if ROUTINES.file.isFile(_MSF.UserDirectory .. file) then
-    --        BASE:Info('Loading: %s', file)
-    --        _MSF:Load(file)
-    --    end
-    --end
+    -- Load User modules.
+    _MM:InitModuleDir(_MM.UserDirectory)
 
     -- Log certifies that at least all modules loaded.
-    BASE:Info('%s initialization finished.', CONFIG.ProjectName)
+    env.info(string.format('%s initialization finished.', CONFIG.ProjectName))
 end
 
 -- Function to determine the working directory of MSF. LFS changes based on whether DCS is running.
-function _MSF:SetDirectories()
+function _MM:SetDirectories()
     if env then
-        _MSF.Directory = lfs.writedir() .. string.format([[Scripts\%s\]], CONFIG.ProjectName)
+        _MM.Directory = lfs.writedir() .. string.format([[Scripts\%s\]], CONFIG.ProjectName)
     else
-        _MSF.Directory = lfs.currentdir() .. [[\]]
+        _MM.Directory = lfs.currentdir() .. [[\]]
     end
 
-    _MSF.ModulesDirectory = _MSF.Directory .. [[Modules\]]
-    _MSF.UserDirectory = _MSF.ModulesDirectory .. [[User\]]
-    _MSF.OptionalDirectory = _MSF.ModulesDirectory .. [[Community\]]
-    _MSF.RequiredDirectory = _MSF.ModulesDirectory .. [[Core\]]
-    _MSF.ObjectsDirectory = _MSF.RequiredDirectory .. [[Objects\]]
-    _MSF.ConfigDirectory = _MSF.Directory .. [[Config\]]
-    _MSF.CommandsDirectory = _MSF.ModulesDirectory .. [[Commands\]]
-    _MSF.BuildsDirectory = _MSF.Directory .. [[Builds\]]
+    _MM.ModulesDirectory = _MM.Directory .. [[Modules\]]
+    _MM.UserDirectory = _MM.ModulesDirectory .. [[User\]]
+    _MM.CommunityDirectory = _MM.ModulesDirectory .. [[Community\]]
+    _MM.CoreDirectory = _MM.ModulesDirectory .. [[Core\]]
+    _MM.ObjectsDirectory = _MM.CoreDirectory .. [[Objects\]]
+    _MM.ConfigDirectory = _MM.Directory .. [[Config\]]
+    _MM.CommandsDirectory = _MM.CoreDirectory .. [[Commands\]]
+    _MM.BuildsDirectory = _MM.Directory .. [[Builds\]]
 
     return
 end
@@ -135,7 +113,7 @@ end
 -- Function to safely add Globals without collisions. Collisions can happen with Moose installed.
 -- Only needed in dev and DCS environment.
 -- The goal of this function is too allow MSF modules even when Moose is installed.
-function _MSF:AddGlobalFromFile(NameOfVariable, File)
+function _MM:AddGlobalFromFile(NameOfVariable, File)
     -- Test if proposed variable name exists in global table.
     if rawget(_G, NameOfVariable) ~= nil then
         env.warning(string.format(
@@ -156,10 +134,10 @@ end
 
 -- This function is similar to dofile(), but only throw's an error if ThrowError is true.
 -- Files must be passed as a table, otherwise will default to loadstring
--- i.e. _MSF:TryLoadStringOrFile({PathToAFile})
+-- i.e. _MM:TryLoadStringOrFile({PathToAFile})
 
 -- Warning: This function will automatically execute files and strings.
-function _MSF:TryLoadStringOrFile(StringOrFile, Silent, ErrorMessage, ThrowError)
+function _MM:TryLoadStringOrFile(StringOrFile, Silent, ErrorMessage, ThrowError)
     -- f is the function loaded from a file, error is optional return from loadfile if an error occurs.
     local f, Error, LoadFunction
 
@@ -206,10 +184,39 @@ function _MSF:TryLoadStringOrFile(StringOrFile, Silent, ErrorMessage, ThrowError
     return f, Error
 end
 
+-- Init Modules in a set directory recursively.
+function _MM:InitModuleDir(DirPath)
+    local Init = _MM:TryLoadStringOrFile({DirPath .. 'Init.lua'}, false,
+            string.format('No Init.lua in %s', DirPath))
+
+    -- If no Init file, then do not load the modules. Priority is unknown.
+    if not Init then return end
+
+    for _, Directory in ipairs(Init) do
+        _MM:InitModules(DirPath .. Directory)
+    end
+end
+
+-- Init Modules in a set directory non-recursively.
+function _MM:InitModules(Directory)
+    local Init = _MM:TryLoadStringOrFile({Directory .. '\\Init.lua'}, false,
+            string.format('No Init.lua in %s', Directory))
+
+    -- If no Init file, then do not load the modules. Priority is unknown.
+    if not Init then print('no init') return end
+
+    for _, File in ipairs(Init) do
+        local FilePath = Directory .. [[\]] .. File
+
+        _MM:TryLoadStringOrFile({FilePath}, false,
+                string.format('Error in %s', FilePath), true)
+    end
+end
+
 -- Test if DCS is in globals to determine if DCS is currently active, if so, init with MSF DCS modules.
 -- If not, MSF inits all command-line functions.
 if env then
-    _MSF:InitDCS()
+    _MM:InitDCS()
 else
-    _MSF:Init()
+    _MM:Init()
 end
