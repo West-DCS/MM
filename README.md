@@ -110,7 +110,7 @@ line and has a number of useful functions. All commands can be executed from you
 
 To install a module:
 1. Run: `MM list -a` to list the available repositories.
-2. Run: `MM install moose` to add the Persist module to your project.
+2. Run: `MM install moose` to add the MOOSE module to your project.
 
 To update a module:
 1. Run: `MM update -i moose` or `MM update -a` to update all modules in the project.
