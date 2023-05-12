@@ -230,10 +230,20 @@ ROUTINES.git.clone = function(URL, destination)
 end
 
 ROUTINES.git.raw = function(User, Repo, FilePath)
-    local Header = '"Accept:application/vnd.github.v3.raw"'
+    local ApplicationHeader = '-H "Accept:application/vnd.github.v3.raw"'
     local Link = string.format('https://api.github.com/repos/%s/%s/contents/%s', User, Repo, FilePath)
+    local GitHubPAT = SECRETS.GitHubPAT
+    local AuthorizationHeader
 
-    return ROUTINES.os.capture(string.format('curl -s -H %s %s', Header, Link))
+    if GitHubPAT then
+        AuthorizationHeader = string.format('-H "Authorization: Bearer %s"', GitHubPAT)
+    else
+        AuthorizationHeader = ''
+    end
+
+    local Capture = ROUTINES.os.capture(string.format('curl -s %s %s %s', Link, ApplicationHeader, AuthorizationHeader))
+
+    return Capture
 end
 
 ROUTINES.string.split = function(String, Sep)
