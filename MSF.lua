@@ -19,6 +19,8 @@ function _MSF:Init()
     -- User Config File
     _, NoConfig = _MSF:TryLoadStringOrFile({ _MSF.ConfigDirectory .. 'Config.lua' }, false,
             'Missing Config.lua file.\nHint: Rename .Config.lua to Config.lua\n')
+    -- User Secrets
+    _MSF:TryLoadStringOrFile({ _MSF.ConfigDirectory .. '.env' })
     -- Routines file holding common-use functions.
     _, NoRoutines = _MSF:TryLoadStringOrFile({ _MSF.RequiredDirectory .. 'Routines.lua' }, false,
             'Missing Routines File.\n', true)
@@ -37,8 +39,9 @@ function _MSF:Init()
             CONFIG.Repository.User, CONFIG.Repository.Repo, CONFIG.Repository.Path),
             false,
             'An Error Occurred Fetching the Repository From GitHub.\n' ..
-            'Hint: You have reached the max amount of requests to GitHub API (60); or,\n' ..
-            'you have incorrectly configured the repository in you Config.lua.\n')
+            'Hint: You have reached the default max amount of requests to GitHub API (60); or,\n' ..
+            'you have incorrectly configured the repository in you Config.lua.\n\n' ..
+            'You can increase your API limit by adding SECRETS.GitHubPAT to an .env file.')
 
     if NoRemote then return end
 
