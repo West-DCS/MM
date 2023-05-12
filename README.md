@@ -173,7 +173,7 @@ Community will be accessible to `Test.lua`.
 # Generating a Static Lua File 
 During development it is useful to dynamically load modules. Your server should probably not do this because this would
 require you to set-up MM. Your server should be as simple as possible and your production .miz file should statically 
-load MM with one mission trigger. You have to options with MM: you can generate a lua file that contains all your code, 
+load MM with one mission trigger. You have two options with MM: you can generate a lua file that contains all your code, 
 or you can generate a lua file that loads the code from your repository. To do this we will use `freeze`.
 
 Generate one file with entire code:
