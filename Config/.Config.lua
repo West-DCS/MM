@@ -7,5 +7,7 @@ CONFIG = {
     -- This is the file where information about repositories is stored on GitHub.
     Repository = {User = 'nicelym', Repo = 'MSF_Repositories', Path = 'REPOSITORIES'},
     -- Remote repository for remote GitHub static Lua file.
-    Remote = {User = 'nicelym', Repo = 'MSF', Path = 'Builds\\{YourBuildFile}.lua'}
+    Remote = {User = 'nicelym', Repo = 'MSF', Path = 'Builds\\{YourBuildFile}.lua'},
+    -- Give priority to MOOSE (in this example), so that it loads before other modules.
+    AutoPriority = 'moose'
 }
