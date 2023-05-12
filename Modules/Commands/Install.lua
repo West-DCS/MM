@@ -1,10 +1,4 @@
-local Add = COMMAND:New()
-
-function Add:_Hooks()
-    local Source = string.format('%sMSFGameGui.lua', _MSF.Directory)
-    local Destination = string.format('%s\\Scripts\\Hooks\\%sGameGui.lua',
-            CONFIG.SavedGames,
-            CONFIG.ProjectName)
+local Install = COMMAND:New('install', 'Install a community module from GitHub.')
 
 -- Fix this later
 --function Install:_Hooks()
@@ -21,18 +15,12 @@ function Add:_Hooks()
 --    ROUTINES.file.write(Destination, '', NameSub)
 --end
 
-    ROUTINES.file.write(Destination, '', NameSub)
-end
-
-function Add:Execute(Args)
-    if not Args[2] then self:Help() return end
+function Install:Execute()
+    if not arg[2] then self:Help() return end
     if not _REPOSITORIES then self:Out('Could not fetch module from GitHub.') return end
     if not REPOSITORIES then REPOSITORIES = {} end
 
     local Name = arg[2]
-
-    if Name == '-help' then self:Help() return end
-    if Name == 'hooks' then self:_Hooks() return end
 
     local Repository
     local Destination
@@ -61,8 +49,8 @@ function Add:Execute(Args)
     self:Out('%s was added.', Name)
 end
 
-function Add:Help()
+function Install:Help()
     self:Out('Usage: add <Module> <URL>\tAdd a module. URL only required for non-listed modules.')
 end
 
-return Add
+return Install
