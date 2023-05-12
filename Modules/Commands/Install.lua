@@ -6,10 +6,20 @@ function Add:_Hooks()
             CONFIG.SavedGames,
             CONFIG.ProjectName)
 
-    local Contents = ROUTINES.file.read(Source, '')
-    local NewPath = string.format([[\%s\]], CONFIG.ProjectName)
-    local DirSub = string.gsub(Contents, '\\$\\', NewPath)
-    local NameSub = string.gsub(DirSub, '#', CONFIG.ProjectName)
+-- Fix this later
+--function Install:_Hooks()
+--    local Source = string.format('%sMSFGameGui.lua', _MSF.Directory)
+--    local Destination = string.format('%s\\Scripts\\Hooks\\%sGameGui.lua',
+--            CONFIG.SavedGames,
+--            CONFIG.ProjectName)
+--
+--    local Contents = ROUTINES.file.read(Source, '')
+--    local NewPath = string.format([[\%s\]], CONFIG.ProjectName)
+--    local DirSub = string.gsub(Contents, '\\$\\', NewPath)
+--    local NameSub = string.gsub(DirSub, '#', CONFIG.ProjectName)
+--
+--    ROUTINES.file.write(Destination, '', NameSub)
+--end
 
     ROUTINES.file.write(Destination, '', NameSub)
 end
