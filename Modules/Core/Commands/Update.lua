@@ -21,7 +21,7 @@ function Update:Execute()
     -- Update all repositories.
     if self.Mode == 'a' then
         for Repo, _ in pairs(REPOSITORIES) do
-            local Path = _MSF.OptionalDirectory .. Repo
+            local Path = _MM.OptionalDirectory .. Repo
 
             ROUTINES.git.update(Path)
         end
@@ -33,7 +33,7 @@ function Update:Execute()
 
         if not REPOSITORIES[self.Module] then self:Out('Module %s not indexed, cannot update.', self.Module) return end
 
-        local Path = _MSF.OptionalDirectory .. self.Module
+        local Path = _MM.OptionalDirectory .. self.Module
 
         ROUTINES.git.update(Path)
     end
