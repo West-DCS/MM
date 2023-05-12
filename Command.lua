@@ -47,9 +47,6 @@ function COMMAND:_ParseArg(ArgIndex, Option)
         else
             self.Options[string.sub(Option, 2, 2)].fun(self)
         end
-    -- The command does not have options, just parameters. Index the options table by numerical index instead.
-    --else
-    --    self.Options[i - 1]()
     end
 end
 
@@ -60,17 +57,6 @@ function COMMAND:_Switch()
     for i, Option in ipairs(arg) do
         -- First Arg is command to run, this is already known. Each arg after first, is the options, followed by
         -- optional parameters.
-
-        -- Test here if the option is -h or -help to break out of loop and output usage function.
-        if i == 2 then
-            local String = string.lower(arg[2])
-
-            if String == '-h' or String == '-help' or String == 'help' then
-                self:Help()
-
-                return false
-            end
-        end
 
         self:_ParseArg(i, Option)
     end
