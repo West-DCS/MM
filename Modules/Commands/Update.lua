@@ -15,6 +15,7 @@ local Options = {
 local Update = COMMAND:New('update', 'Update community modules.', Options)
 
 function Update:Execute()
+    if not arg[2] then self:Help() return end
     if not REPOSITORIES then self:Out('Nothing to update. Add a module with "add <Name>"') return end
 
     -- Update all repositories.
