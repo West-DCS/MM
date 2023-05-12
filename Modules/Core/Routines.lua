@@ -137,7 +137,9 @@ ROUTINES.file.GetFilesInDir = function(Directory)
     return Files
 end
 
-ROUTINES.file.EDSerialize = function(Name, Value, Level, File)
+ROUTINES.file.EDSerialize = function(Name, Value, Level, File, Local)
+    if Local then File:write('local ') end
+
     if Level == nil then Level = "" end
 
     if Level ~= "" then Level = Level .."  " end
@@ -167,11 +169,17 @@ ROUTINES.file.EDSerialize = function(Name, Value, Level, File)
             File:write(Level .."}, -- end of " .. Name .."\n")
         end
     end
+
+    if Local then
+        File:write(string.format('return %s', Name))
+    end
 end
 
-ROUTINES.file.EDSerializeToFile = function(FilePath, FileName, Table)
-    local File = io.open(FilePath .. FileName, 'w')
-    ROUTINES.file.EDSerialize(FileName, Table, nil, File)
+ROUTINES.file.EDSerializeToFile = function(FilePath, FileName, Table, Extension, Local)
+    if not Extension then Extension = '' end
+
+    local File = io.open(FilePath .. FileName .. Extension, 'w')
+    ROUTINES.file.EDSerialize(FileName, Table, nil, File, Local)
     File:close()
 end
 
@@ -232,11 +240,10 @@ end
 ROUTINES.git.raw = function(User, Repo, FilePath)
     local ApplicationHeader = '-H "Accept:application/vnd.github.v3.raw"'
     local Link = string.format('https://api.github.com/repos/%s/%s/contents/%s', User, Repo, FilePath)
-    local GitHubPAT = SECRETS.GitHubPAT
     local AuthorizationHeader
 
-    if GitHubPAT then
-        AuthorizationHeader = string.format('-H "Authorization: Bearer %s"', GitHubPAT)
+    if GITHUBPAT then
+        AuthorizationHeader = string.format('-H "Authorization: Bearer %s"', GITHUBPAT)
     else
         AuthorizationHeader = ''
     end
