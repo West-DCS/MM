@@ -225,13 +225,6 @@ function _MM:InitModules(Directory, IgnoreInit, Hook)
 
         _MM:TryLoadStringOrFile({FilePath}, false,
                 string.format('Error in %s', FilePath), true)
-
-        if Hook then
-            Hook({
-                Dir = Directory,
-                File = File
-            })
-        end
     end
 end
 
