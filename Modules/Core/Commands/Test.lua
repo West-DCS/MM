@@ -9,8 +9,15 @@ function Test:LoopResults()
 end
 
 function Test:Execute()
-    print('Running Tests')
-    _MM:InitModules(_MM.TestDirectory, true)
+    _MM:InitModules(_MM.TestDirectory, true, LoadHook)
+
+    for File, Failures in pairs(TEST.Failed) do
+        self:Out(File)
+        for _, Failure in ipairs(Failures) do
+            self:Out('\t%s', Failure)
+        end
+
+    end
 end
 
 function Test:Help()
