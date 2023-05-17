@@ -125,12 +125,20 @@ ROUTINES.file.isDir = function(dirName)
     end
 end
 
-ROUTINES.file.GetFilesInDir = function(Directory)
+ROUTINES.file.GetFilesInDir = function(Directory, Relative, Array)
     local Files = {}
 
     for File in lfs.dir(Directory) do
         if ROUTINES.file.isFile(Directory .. File) then
-            Files[File] = Directory .. File
+            local PrintDirectory = Directory
+            -- Ignore full directory path.
+            if Relative then PrintDirectory = '' end
+
+            if not Array then
+                Files[File] = PrintDirectory .. File
+            else
+                table.insert(Files, PrintDirectory .. File)
+            end
         end
     end
 
