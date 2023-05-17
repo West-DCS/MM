@@ -106,6 +106,7 @@ function _MM:SetDirectories()
     _MM.ConfigDirectory = _MM.Directory .. [[Config\]]
     _MM.CommandsDirectory = _MM.CoreDirectory .. [[Commands\]]
     _MM.BuildsDirectory = _MM.Directory .. [[Builds\]]
+    _MM.TestDirectory = _MM.ModulesDirectory .. [[Tests\]]
 
     return
 end
