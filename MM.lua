@@ -199,7 +199,7 @@ function _MM:InitModuleDir(DirPath)
 end
 
 -- Init Modules in a set directory non-recursively.
-function _MM:InitModules(Directory, IgnoreInit)
+function _MM:InitModules(Directory, IgnoreInit, Hook)
     local Init
 
     if not IgnoreInit then
@@ -218,6 +218,13 @@ function _MM:InitModules(Directory, IgnoreInit)
 
         _MM:TryLoadStringOrFile({FilePath}, false,
                 string.format('Error in %s', FilePath), true)
+
+        if Hook then
+            Hook({
+                Dir = Directory,
+                File = File
+            })
+        end
     end
 end
 
