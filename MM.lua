@@ -216,6 +216,13 @@ function _MM:InitModules(Directory, IgnoreInit, Hook)
     for _, File in ipairs(Init) do
         local FilePath = Directory .. [[\]] .. File
 
+        if Hook then
+            Hook({
+                Dir = Directory,
+                File = File
+            })
+        end
+
         _MM:TryLoadStringOrFile({FilePath}, false,
                 string.format('Error in %s', FilePath), true)
 
