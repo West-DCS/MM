@@ -199,12 +199,19 @@ function _MM:InitModuleDir(DirPath)
 end
 
 -- Init Modules in a set directory non-recursively.
-function _MM:InitModules(Directory)
-    local Init = _MM:TryLoadStringOrFile({Directory .. '\\Init.lua'}, false,
-            string.format('No Init.lua in %s', Directory))
+function _MM:InitModules(Directory, IgnoreInit)
+    local Init
 
-    -- If no Init file, then do not load the modules. Priority is unknown.
-    if not Init then print('no init') return end
+    if not IgnoreInit then
+        Init = _MM:TryLoadStringOrFile({Directory .. '\\Init.lua'}, false,
+                string.format('No Init.lua in %s', Directory))
+
+        -- If no Init file, then do not load the modules. Priority is unknown.
+        if not Init then print('no init') return end
+    end
+
+    -- If an Init file should be ignored or is not present, get the files that exist in a directory.
+    if IgnoreInit then Init = ROUTINES.file.GetFilesInDir(Directory, true, true) end
 
     for _, File in ipairs(Init) do
         local FilePath = Directory .. [[\]] .. File
